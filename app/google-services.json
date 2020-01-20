@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "331082772362",
+    "firebase_url": "https://board-gamer-app-f9359.firebaseio.com",
+    "project_id": "board-gamer-app-f9359",
+    "storage_bucket": "board-gamer-app-f9359.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:331082772362:android:1cd804f74e9b589c296273",
+        "android_client_info": {
+          "package_name": "com.example.boardgamer_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "331082772362-7dm78t80j0t71usuhjqtpjm9dekvo58v.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAorhO-5kC7biyWkrH4Sb9ERKtgKWb5ohg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "331082772362-7dm78t80j0t71usuhjqtpjm9dekvo58v.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
