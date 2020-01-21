@@ -15,26 +15,26 @@
             android:id="@+id/textView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Willkommen in der Board-Gamer App für deinen perfekten Spieleabend!" />
+            android:text="@string/text_welcome" />
 
         <Button
             android:id="@+id/button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Aktuelle Termine" />
+            android:text="@string/btn_dates" />
 
         <Button
             android:id="@+id/button2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:onClick="onClickNeuerTermin"
-            android:text="Neuer Termin" />
+            android:text="@string/btn_new_date" />
 
         <Button
             android:id="@+id/button3"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Nachrichten"
+            android:text="@string/btn_messages"
             android:onClick="onClickNachrichten"/>
 
         <Button
@@ -42,7 +42,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:onClick="onClickEinstellungen"
-            android:text="Einstellungen" />
+            android:text="@string/btn_settings" />
 
         <TextView
             android:id="@+id/textViewCondition"

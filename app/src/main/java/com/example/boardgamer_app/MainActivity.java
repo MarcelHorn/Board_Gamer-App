@@ -30,6 +30,7 @@ DatabaseReference mConditionRef = mRootRef.child("condition");
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_main);
         mConditionTextView = (TextView)findViewById(R.id.textViewCondition);
         mButtonSunny = (Button)findViewById(R.id.buttonSunny);

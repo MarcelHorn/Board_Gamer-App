@@ -2,4 +2,27 @@
     <string name="app_name">Board Gamer-App</string>
     <string name="title_activity_main2">Main2Activity</string>
     <string name="action_settings">Settings</string>
+
+    //Buttons
+    <string name="btn_new_date">Neuer Termin</string>
+    <string name="btn_dates">Aktuelle Termine</string>
+    <string name="btn_messages">Nachrichten</string>
+    <string name="btn_settings">Einstellungen</string>
+    <string name="btn_date_request">Terminanfragen</string>
+    <string name="btn_received_messages">Erhaltene Nachrichten</string>
+    <string name="btn_pending_rating">Ausstehende Bewertungen</string>
+    <string name="btn_groups">Gruppen</string>
+    <string name="btn_settings_messages">Benachrichtigungen</string>
+    <string name="btn_settings_profile">Profil</string>
+    <string name="btn_show_groups">Aktuelle Gruppen</string>
+    <string name="btn_new_groups">Neue Gruppe</string>
+
+    //Switches
+    <string name="switch_push_notification">Push-Benachrichtigungen</string>
+    <string name="switch_mail_notification">E-Mail-Benachrichtigungen</string>
+
+    //Plain Text
+    <string name="text_welcome">Willkommen in der Board-Gamer App für deinen perfekten Spieleabend!</string>
+    <string name="text_setting_username">Benutzername</string>
+    <string name="text_setting_mail">E-Mail-Adresse</string>
 </resources>

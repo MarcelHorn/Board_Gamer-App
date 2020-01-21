@@ -15,12 +15,12 @@
             android:id="@+id/switch1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Push-Benachrichtigungen" />
+            android:text="@string/switch_push_notification" />
 
         <Switch
             android:id="@+id/switch2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="E-Mail-Benachrichtigungen" />
+            android:text="@string/switch_mail_notification" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
