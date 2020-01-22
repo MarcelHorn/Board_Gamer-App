@@ -86,7 +86,7 @@ DatabaseReference mConditionRef = mRootRef.child("condition");
     }
 
     public void onClickNeuerTermin (View Button) {
-        Intent changeIntent = new Intent (MainActivity.this, Main7Activity.class);
+        Intent changeIntent = new Intent (MainActivity.this, Activity_new_date.class);
         startActivity(changeIntent);
     }
 }

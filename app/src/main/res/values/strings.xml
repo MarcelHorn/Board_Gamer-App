@@ -25,4 +25,8 @@
     <string name="text_welcome">Willkommen in der Board-Gamer App für deinen perfekten Spieleabend!</string>
     <string name="text_setting_username">Benutzername</string>
     <string name="text_setting_mail">E-Mail-Adresse</string>
+    <string name="btn_time_select">Uhrzeit wählen</string>
+    <string name="text_date_plain">Uhrzeit</string>
+    <string name="text_date_time_plain">Datum</string>
+    <string name="text_title_new_date">Zum erstelllen eines neuen Termins, bitte Datum und Uhrzeit wählen</string>
 </resources>
