@@ -6,7 +6,9 @@ import androidx.fragment.app.DialogFragment;
 import android.app.TimePickerDialog;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.Spinner;
 import android.widget.TimePicker;
 
 import com.example.boardgamer_app.Classes.TimePickerFragment;
@@ -17,6 +19,21 @@ public class Activity_create_group extends AppCompatActivity implements TimePick
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_group);
+
+        Spinner spinnerWeekdays = (Spinner) findViewById(R.id.spinnerWeekdays);
+        Spinner spinnerInterval = (Spinner) findViewById(R.id.spinnerInterval);
+
+        //Wochentag Adapter
+        ArrayAdapter<String> adapterWeekdays = new ArrayAdapter<String>(Activity_create_group.this,
+                android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.weekdays));
+        adapterWeekdays.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerWeekdays.setAdapter(adapterWeekdays);
+
+        //Intervall Adapter
+        ArrayAdapter<String> adapterInterval = new ArrayAdapter<String>(Activity_create_group.this,
+                android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.intervals));
+        adapterWeekdays.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerInterval.setAdapter(adapterInterval);
     }
 
     //

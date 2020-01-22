@@ -3,6 +3,24 @@
     <string name="title_activity_main2">Main2Activity</string>
     <string name="action_settings">Settings</string>
 
+    <string-array name="weekdays">
+        <item>Wochentag wählen...</item>
+        <item>Montags</item>
+        <item>Dienstags</item>
+        <item>Mittwochs</item>
+        <item>Donnerstags</item>
+        <item>Freitags</item>
+        <item>Samstags</item>
+        <item>Sonntags</item>
+    </string-array>
+
+    <string-array name="intervals">
+        <item>Rhythmus wählen...</item>
+        <item>7 Tage</item>
+        <item>14 Tage</item>
+        <item>28 Tage</item>
+    </string-array>
+
     //Buttons
     <string name="btn_new_date">Anstehende Termine</string>
     <string name="btn_dates">Aktuelle Termine (unnötig?)</string>
@@ -33,7 +51,7 @@
 
     <string name="text_date_plain">Uhrzeit</string>
     <string name="text_date_time_plain">Datum</string>
-    <string name="text_title_Create_Group">Zum erstelllen einer neuen Gruppe, bitte Wochentag, Rhytmus und Uhrzeit wählen</string>
+    <string name="text_title_Create_Group">Zum erstelllen einer neuen Gruppe, bitte Wochentag, Rhythmus und Uhrzeit wählen</string>
 
     <string name="title_activity_confirm">Confirm</string>
     <string name="text_city">Wohnort</string>
