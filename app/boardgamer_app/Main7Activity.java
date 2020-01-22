@@ -9,6 +9,6 @@ public class Main7Activity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_new_date);
+        setContentView(R.layout.activity_Create_Group);
     }
 }

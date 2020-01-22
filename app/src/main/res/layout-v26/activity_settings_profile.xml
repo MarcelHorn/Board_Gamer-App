@@ -26,7 +26,8 @@
             android:layout_height="wrap_content"
             android:ems="10"
             android:inputType="textPersonName"
-            android:text="@string/text_setting_mail" />
+            android:text="@string/text_setting_mail"
+            android:autofillHints="" />
 
         <EditText
             android:id="@+id/editText"
@@ -34,7 +35,8 @@
             android:layout_height="wrap_content"
             android:ems="10"
             android:inputType="textPersonName"
-            android:text="Wohnort" />
+            android:text="@string/text_city"
+            android:autofillHints="" />
 
         <EditText
             android:id="@+id/editText2"
@@ -42,7 +44,8 @@
             android:layout_height="wrap_content"
             android:ems="10"
             android:inputType="textPersonName"
-            android:text="Straße" />
+            android:text="@string/text_settings_street"
+            android:autofillHints="" />
 
         <EditText
             android:id="@+id/editText3"
@@ -50,12 +53,13 @@
             android:layout_height="wrap_content"
             android:ems="10"
             android:inputType="textPersonName"
-            android:text="Hausnummer" />
+            android:text="@string/text_setting_houseNumber"
+            android:autofillHints="" />
 
         <Button
             android:id="@+id/button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Aktualisieren" />
+            android:text="@string/btn_settings_refresh" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

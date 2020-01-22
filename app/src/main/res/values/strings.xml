@@ -4,8 +4,8 @@
     <string name="action_settings">Settings</string>
 
     //Buttons
-    <string name="btn_new_date">Neuer Termin</string>
-    <string name="btn_dates">Aktuelle Termine</string>
+    <string name="btn_new_date">Anstehende Termine</string>
+    <string name="btn_dates">Aktuelle Termine (unnötig?)</string>
     <string name="btn_messages">Nachrichten</string>
     <string name="btn_settings">Einstellungen</string>
     <string name="btn_date_request">Terminanfragen</string>
@@ -15,7 +15,12 @@
     <string name="btn_settings_messages">Benachrichtigungen</string>
     <string name="btn_settings_profile">Profil</string>
     <string name="btn_show_groups">Aktuelle Gruppen</string>
-    <string name="btn_new_groups">Neue Gruppe</string>
+    <string name="btn_leave_group">Gruppe verlassen</string>
+    <string name="btn_time_select">Uhrzeit wählen</string>
+    <string name="btn_group_create">Gruppe erstellen</string>
+    <string name="btn_interval">Intervall</string>
+    <string name="btn_date">Datum</string>
+    <string name="btn_time">Uhrzeit</string>
 
     //Switches
     <string name="switch_push_notification">Push-Benachrichtigungen</string>
@@ -25,8 +30,18 @@
     <string name="text_welcome">Willkommen in der Board-Gamer App für deinen perfekten Spieleabend!</string>
     <string name="text_setting_username">Benutzername</string>
     <string name="text_setting_mail">E-Mail-Adresse</string>
-    <string name="btn_time_select">Uhrzeit wählen</string>
+
     <string name="text_date_plain">Uhrzeit</string>
     <string name="text_date_time_plain">Datum</string>
-    <string name="text_title_new_date">Zum erstelllen eines neuen Termins, bitte Datum und Uhrzeit wählen</string>
+    <string name="text_title_Create_Group">Zum erstelllen einer neuen Gruppe, bitte Wochentag, Rhytmus und Uhrzeit wählen</string>
+
+    <string name="title_activity_confirm">Confirm</string>
+    <string name="text_city">Wohnort</string>
+    <string name="text_settings_street">Straße</string>
+    <string name="text_setting_houseNumber">Hausnummer</string>
+    <string name="btn_settings_refresh">Aktualisieren</string>
+    <string name="btn_show_group_member">Gruppenmitglieder</string>
+    <string name="text_isMemberSince">Mitglied seit:</string>
+    <string name="btn_Create_group">Gruppe erstellen</string>
+    <string name="btn_next">Nächster Termin</string>
 </resources>

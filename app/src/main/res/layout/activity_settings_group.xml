@@ -15,12 +15,19 @@
             android:id="@+id/button8"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/btn_show_groups" />
+            android:text="@string/btn_show_group_member" />
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/text_isMemberSince" />
 
         <Button
             android:id="@+id/button12"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/btn_new_groups" />
+            android:text="@string/btn_leave_group" />
+
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
