@@ -10,10 +10,12 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import com.example.boardgamer_app.Classes.TimePickerFragment;
 
 public class Activity_create_group extends AppCompatActivity implements TimePickerDialog.OnTimeSetListener {
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +42,15 @@ public class Activity_create_group extends AppCompatActivity implements TimePick
     public void onClickTimeSelect(View view) {
         DialogFragment timePicker = new TimePickerFragment();
         timePicker.show(getSupportFragmentManager(), "time picker");
+    }
+
+    public void onClickCreateGroup(View view) {
+        Spinner spinnerWeekdays = (Spinner) findViewById(R.id.spinnerWeekdays);
+        Spinner spinnerInterval = (Spinner) findViewById(R.id.spinnerInterval);
+        Button time = (Button) findViewById(R.id.btnTime);
+        String toast = "Gruppe erstellt: Uhrzeit: " + time.getText() + ", Wochentag: " + spinnerWeekdays.getSelectedItem().toString() + ", Rhythmus: "+ spinnerInterval.getSelectedItem().toString();
+        Toast.makeText(Activity_create_group.this,toast,Toast.LENGTH_LONG ).show();
+
     }
     @Override
     public void onTimeSet(TimePicker timePicker, int i, int i1) {
