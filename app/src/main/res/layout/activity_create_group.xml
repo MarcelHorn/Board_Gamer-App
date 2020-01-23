@@ -20,8 +20,21 @@
         <TextView
             android:id="@+id/textHeaderNewDate"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="72dp"
             android:text="@string/text_title_Create_Group" />
+
+        <Spinner
+            android:id="@+id/spinnerWeekdays"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:drawable/spinner_background"
+            android:popupBackground="@color/common_google_signin_btn_text_dark_default" />
+
+        <Spinner
+            android:id="@+id/spinnerInterval"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:drawable/spinner_background" />
 
         <Button
             android:id="@+id/btnTime"
@@ -31,15 +44,13 @@
             android:onClick="onClickTimeSelect"
             android:text="@string/btn_time" />
 
-        <Spinner
-            android:id="@+id/spinnerWeekdays"
+        <TextView
+            android:id="@+id/textFirstEvening"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
-        <Spinner
-            android:id="@+id/spinnerInterval"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="56dp"
+            android:textAlignment="center"
+            android:textColor="#641313"
+            android:textSize="18sp" />
 
         <Button
             android:id="@+id/btnCreate"
