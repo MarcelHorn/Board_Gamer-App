@@ -38,11 +38,14 @@
 
         <Button
             android:id="@+id/btnTime"
+            style="@style/Widget.AppCompat.Button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="28dp"
             android:onClick="onClickTimeSelect"
-            android:text="@string/btn_time" />
+            android:text="@string/btn_time"
+            android:background="@drawable/custom_button"
+            />
 
         <TextView
             android:id="@+id/textFirstEvening"
@@ -57,7 +60,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:onClick="onClickCreateGroup"
+            android:background="@drawable/custom_button"
             android:text="@string/btn_group_create" />
+
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

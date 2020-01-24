@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/darkwhite"
     tools:context=".MainActivity">
 
     <LinearLayout
@@ -11,6 +12,7 @@
         android:layout_width="303dp"
         android:layout_height="623dp"
         android:layout_marginStart="24dp"
+        android:layout_marginTop="10dp"
         android:layout_marginEnd="24dp"
         android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
@@ -26,8 +28,10 @@
         <Button
             android:id="@+id/button13"
             android:layout_width="match_parent"
-            android:layout_height="61dp"
-            android:background="#63FF0000"
+            android:layout_height="60dp"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/custom_button"
+            android:password="false"
             android:text="@string/btn_next" />
 
         <Button
@@ -35,6 +39,8 @@
             style="@android:style/Widget.DeviceDefault.Light.Button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/custom_button"
             android:text="@string/btn_new_date"
             tools:visibility="visible" />
 
@@ -42,6 +48,8 @@
             android:id="@+id/button3"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/custom_button"
             android:onClick="onClickNachrichten"
             android:text="@string/btn_messages" />
 
@@ -49,6 +57,7 @@
             android:id="@+id/button4"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@drawable/custom_button"
             android:onClick="onClickEinstellungen"
             android:text="@string/btn_settings" />
 
@@ -62,12 +71,14 @@
             android:id="@+id/buttonSunny"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@drawable/custom_button"
             android:text="Sunny" />
 
         <Button
             android:id="@+id/buttonFoggy"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@drawable/custom_button"
             android:text="foggy" />
 
     </LinearLayout>
@@ -77,6 +88,7 @@
         android:layout_width="181dp"
         android:layout_height="63dp"
         android:layout_marginBottom="28dp"
+        android:background="@drawable/custom_button"
         android:onClick="onClickGruppenErstellung"
         android:text="@string/btn_Create_group"
         app:layout_constraintBottom_toBottomOf="parent"
