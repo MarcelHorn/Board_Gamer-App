@@ -26,21 +26,13 @@
             android:text="@string/text_welcome" />
 
         <Button
-            android:id="@+id/button13"
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:layout_marginBottom="10dp"
-            android:background="@drawable/custom_button"
-            android:password="false"
-            android:text="@string/btn_next" />
-
-        <Button
             android:id="@+id/button2"
             style="@android:style/Widget.DeviceDefault.Light.Button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
             android:background="@drawable/custom_button"
+            android:onClick="onClickAnstehendeTermine"
             android:text="@string/btn_new_date"
             tools:visibility="visible" />
 
@@ -60,26 +52,6 @@
             android:background="@drawable/custom_button"
             android:onClick="onClickEinstellungen"
             android:text="@string/btn_settings" />
-
-        <TextView
-            android:id="@+id/textViewCondition"
-            android:layout_width="match_parent"
-            android:layout_height="58dp"
-            android:text="Sunny" />
-
-        <Button
-            android:id="@+id/buttonSunny"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/custom_button"
-            android:text="Sunny" />
-
-        <Button
-            android:id="@+id/buttonFoggy"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/custom_button"
-            android:text="foggy" />
 
     </LinearLayout>
 
