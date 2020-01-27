@@ -64,6 +64,7 @@
     <string name="login_password">Passwort</string>
     <string name="btn_login">Login</string>
     <string name="txt_link_register">Kein Konto? hier registrieren!</string>
+    <string name="btn_register">Registrieren</string>
     <string name="text_isMemberSince">Mitglied seit:</string>
 
 

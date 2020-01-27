@@ -18,4 +18,9 @@ public class Activity_login extends AppCompatActivity {
         Intent changeIntent = new Intent (this, MainActivity.class);
         startActivity(changeIntent);
     }
+
+    public void onClickRegister (View Button) {
+        Intent changeIntent = new Intent (this, Activity_register.class);
+        startActivity(changeIntent);
+    }
 }
