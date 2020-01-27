@@ -59,7 +59,13 @@
     <string name="text_city">Wohnort</string>
     <string name="text_settings_street">Straße</string>
     <string name="text_setting_houseNumber">Hausnummer</string>
+    <string name="text_login_title">Willkommen</string>
+    <string name="login_mail">E-Mail-Adresse</string>
+    <string name="login_password">Passwort</string>
+    <string name="btn_login">Login</string>
+    <string name="txt_link_register">Kein Konto? hier registrieren!</string>
     <string name="text_isMemberSince">Mitglied seit:</string>
+
 
 
 </resources>
