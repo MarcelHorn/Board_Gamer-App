@@ -39,8 +39,16 @@
             android:id="@+id/button11"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
             android:background="@drawable/custom_button"
             android:onClick="onClickProfil"
             android:text="@string/btn_settings_profile" />
+
+        <Button
+            android:id="@+id/btn_logout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/custom_button"
+            android:text="Ausloggen" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
