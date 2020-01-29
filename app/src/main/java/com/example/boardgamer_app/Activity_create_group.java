@@ -15,6 +15,7 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.example.boardgamer_app.Classes.Evening;
+import com.example.boardgamer_app.Classes.Group;
 import com.example.boardgamer_app.Classes.TimePickerFragment;
 
 import java.text.SimpleDateFormat;
@@ -130,6 +131,10 @@ public class Activity_create_group extends AppCompatActivity implements TimePick
         Spinner spinnerWeekdays = (Spinner) findViewById(R.id.spinnerWeekdays);
         Spinner spinnerInterval = (Spinner) findViewById(R.id.spinnerInterval);
         Button time = (Button) findViewById(R.id.btnTime);
+
+        Group group = new Group();
+        //group.setAdmin();
+
         String toast = "Gruppe erstellt: Uhrzeit: " + time.getText() + ", Wochentag: " + spinnerWeekdays.getSelectedItem().toString() + ", Rhythmus: "+ spinnerInterval.getSelectedItem().toString();
         Toast.makeText(Activity_create_group.this,toast,Toast.LENGTH_LONG ).show();
 

@@ -36,6 +36,7 @@ public class Activity_login extends AppCompatActivity {
         emailId = findViewById(R.id.editText_login_mail);
         password = findViewById(R.id.editText_login_password);
 
+
         //Button login
         btnSignIn = findViewById(R.id.btn_login);
 

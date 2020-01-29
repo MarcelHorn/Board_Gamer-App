@@ -5,21 +5,31 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class Activity_register extends AppCompatActivity {
 
-    EditText emailId, password;
+    private static final String TAG = "Activity_register" ;
+    EditText name,emailId, password;
     Button btnSignUp;
     FirebaseAuth mFirebaseAuth;
+    //Instanz zur Datenbank
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,7 +39,8 @@ public class Activity_register extends AppCompatActivity {
         //Firebase Instanz für Authentification
         mFirebaseAuth = FirebaseAuth.getInstance();
 
-        //Eingabefelder E-Mail und Passwort
+        //Eingabefelder Name, E-Mail und Passwort
+        name = findViewById(R.id.editText_register_name);
         emailId = findViewById(R.id.editText_register_mail);
         password = findViewById(R.id.editText_register_password);
 
@@ -41,8 +52,9 @@ public class Activity_register extends AppCompatActivity {
         {
             @Override
             public void onClick(View v) {
-                String email = emailId.getText().toString();
+                final String email = emailId.getText().toString();
                 String pw = password.getText().toString();
+                final String username = name.getText().toString();
 
 
                 if (email.isEmpty() && pw.isEmpty())
@@ -61,8 +73,9 @@ public class Activity_register extends AppCompatActivity {
                 }
                 //sind alle Felder ausgefüllt folgt der VERSUCH in die Datenbank zu schreiben. Der OnCompleteListener prüft, ob die Methode "createUserWithEmailAndPassword" erfolgreich war
                 //Ein Fehler wäre z.B. eine ungültige E-Mail Formatierung (z.B. ohne "@") oder ein Passwort mit weniger als 6 Zeichen
-                else if (!(email.isEmpty() && pw.isEmpty()))
+                else if (!(email.isEmpty() && pw.isEmpty() && username.isEmpty()))
                 {
+
                     mFirebaseAuth.createUserWithEmailAndPassword(email, pw).addOnCompleteListener(Activity_register.this, new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
@@ -72,7 +85,28 @@ public class Activity_register extends AppCompatActivity {
                             }
                             else
                             {
-                                Toast.makeText(Activity_register.this,"Erfolgreich registriert!",Toast.LENGTH_SHORT).show();
+                                Map<String, Object> data = new HashMap<>();
+                                data.put("name", username);
+                                data.put("inGroup", false);
+                                data.put("isAdmin", false);
+
+                                //Toast.makeText(Activity_register.this,"Erfolgreich registriert!",Toast.LENGTH_SHORT).show();
+                                db.collection("User")
+                                        .document(email)
+                                        .set(data)
+                                        .addOnSuccessListener(new OnSuccessListener<Void>(){
+                                            @Override
+                                            public void onSuccess(Void aVoid) {
+                                                Toast.makeText(Activity_register.this,"Success", Toast.LENGTH_LONG).show();
+                                            }
+                                        })
+                                    .addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+                                            Log.d(TAG, "onFailure: " + e.toString());
+                                        }
+                                    });
+
                                 startActivity(new Intent(Activity_register.this,MainActivity.class));
                             }
                         }
