@@ -23,7 +23,14 @@ import java.util.Map;
 public class MainActivity extends AppCompatActivity {
 
 
+    //Keys
+    public static final String KEY_NAME = "name";
+
+    //optional: ist der TAG der Exception, um mögliche Fehler zu lokalisieren
+
     private static final String TAG = "mainActivity";
+
+    //Gesamte Datenbank Instanz
     FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     @Override
