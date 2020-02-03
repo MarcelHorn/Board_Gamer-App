@@ -12,23 +12,34 @@ import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
-import android.widget.Toast;
 
+import com.example.boardgamer_app.Classes.DatabaseController;
 import com.example.boardgamer_app.Classes.GroupProperties;
 import com.example.boardgamer_app.Classes.TimePickerFragment;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
 
 public class Main4Activity extends AppCompatActivity implements TimePickerDialog.OnTimeSetListener{
+
+    //DatenbankController: Beinhaltet die FirebaseAuth und FireStore Instanz und diverse Methoden zum schreiben und Lesen
+    DatabaseController databaseController = new DatabaseController();
+    String weekday;
+    Calendar calendar = Calendar.getInstance();
+    Spinner spinnerWeekdays, spinnerInterval;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings_group);
 
-        Spinner spinnerWeekdays = (Spinner) findViewById(R.id.spinnerWeekdays);
-        Spinner spinnerInterval = (Spinner) findViewById(R.id.spinnerInterval);
+
+
+        spinnerWeekdays = (Spinner) findViewById(R.id.spinnerWeekdays);
+        spinnerInterval = (Spinner) findViewById(R.id.spinnerInterval);
 
         //Wochentag Adapter
         ArrayAdapter<String> adapterWeekdays = new ArrayAdapter<String>(Main4Activity.this,
@@ -51,9 +62,8 @@ public class Main4Activity extends AppCompatActivity implements TimePickerDialog
 
                 //Bei "Wochentag wählen..." soll nichts passieren
                 //Andernfalls wird das aktuelle Datum bestimmt mit .getInstance()
-                if(!selectedItem.equals("Wochentag wählen..."))
+                if (!(selectedItem.equals("Wochentag wählen...") || selectedItem.equals("Rhythmus wählen...")))
                 {
-                    Calendar date1 = Calendar.getInstance();
                     int weekday;
                     //Jeder Wochentag hat einen Integer wert in der "CALENDAR" Klasse, die werden hier gesetzt:
                     switch (selectedItem)
@@ -84,7 +94,7 @@ public class Main4Activity extends AppCompatActivity implements TimePickerDialog
                             break;
                     }
 
-                    CalculateFirstEvening(date1, weekday);
+                    CalculateFirstEvening(weekday);
                 }
             }
             //muss man schreiben, falls das Feld mal leer ist...
@@ -96,18 +106,20 @@ public class Main4Activity extends AppCompatActivity implements TimePickerDialog
     }
 
     //Methode zum Berrechnen des nächsten Wochentages in der Zukunft
-    public void CalculateFirstEvening(Calendar date, int weekday)
+    public void CalculateFirstEvening(int weekday)
     {
+        Calendar firstDate = calendar;
+
         //Solange 1 Tag draufrechnen, bis der geforderte Wochentag erreicht ist
-        while (date.get(Calendar.DAY_OF_WEEK) != weekday)
+        while (firstDate.get(Calendar.DAY_OF_WEEK) != weekday)
         {
-            date.add(Calendar.DATE, 1);
+            firstDate.add(Calendar.DATE, 1);
         }
 
         TextView textFirstEvening = (TextView) findViewById(R.id.textFirstEvening);
         //Format ändern auf dd.MM.yyyy zur Übersicht
         SimpleDateFormat df = new SimpleDateFormat("EEEE dd.MM.yyyy");
-        String formattedDate = df.format(date.getTime());
+        String formattedDate = df.format(firstDate.getTime());
         ////
         textFirstEvening.setText("Erster Spieleabend findet am "  + formattedDate + " statt.");
 
@@ -116,15 +128,22 @@ public class Main4Activity extends AppCompatActivity implements TimePickerDialog
     }
 
     public void onClickRefreshGroup(View view) {
-        Spinner spinnerWeekdays = (Spinner) findViewById(R.id.spinnerWeekdays);
-        Spinner spinnerInterval = (Spinner) findViewById(R.id.spinnerInterval);
-        Button time = (Button) findViewById(R.id.btnTime);
 
-        GroupProperties group = new GroupProperties();
-        //group.setAdmin();
 
-        String toast = "Gruppe erstellt: Uhrzeit: " + time.getText() + ", Wochentag: " + spinnerWeekdays.getSelectedItem().toString() + ", Rhythmus: "+ spinnerInterval.getSelectedItem().toString();
-        Toast.makeText(Main4Activity.this,toast,Toast.LENGTH_LONG ).show();
+        SimpleDateFormat sdfTime = new SimpleDateFormat("HH:mm");
+        String time = sdfTime.format(calendar.getTime());
+
+        Map<String, Object> dataGroup = new HashMap<>();
+        dataGroup.put("Wochentag" , calendar.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, Locale.getDefault()));
+        dataGroup.put("Rhythmus", spinnerInterval.getSelectedItem().toString());
+        dataGroup.put("Uhrzeit", time);
+
+        databaseController.writeInDatabase("Gruppe", "Gruppeneinstellungen", dataGroup);
+
+        
+
+
+
 
 
     }
@@ -138,6 +157,9 @@ public class Main4Activity extends AppCompatActivity implements TimePickerDialog
     @Override
     public void onTimeSet(TimePicker timePicker, int i, int i1)
     {
+        calendar.set(Calendar.HOUR_OF_DAY, i);
+        calendar.set(Calendar.MINUTE, i1);
+
         Button button =findViewById(R.id.btnTime);
         if (i1 == 0)
         {
