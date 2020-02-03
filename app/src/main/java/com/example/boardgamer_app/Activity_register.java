@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.boardgamer_app.Classes.DatabaseController;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -27,9 +28,10 @@ public class Activity_register extends AppCompatActivity {
     private static final String TAG = "Activity_register" ;
     EditText name,emailId, password;
     Button btnSignUp;
-    FirebaseAuth mFirebaseAuth;
+    DatabaseController databaseController = new DatabaseController();
+    //FirebaseAuth mFirebaseAuth;
     //Instanz zur Datenbank
-    FirebaseFirestore db = FirebaseFirestore.getInstance();
+    //FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,7 +39,7 @@ public class Activity_register extends AppCompatActivity {
         setContentView(R.layout.activity_register);
 
         //Firebase Instanz für Authentification
-        mFirebaseAuth = FirebaseAuth.getInstance();
+        //mFirebaseAuth = FirebaseAuth.getInstance();
 
         //Eingabefelder Name, E-Mail und Passwort
         name = findViewById(R.id.editText_register_name);
@@ -76,7 +78,7 @@ public class Activity_register extends AppCompatActivity {
                 else if (!(email.isEmpty() && pw.isEmpty() && username.isEmpty()))
                 {
 
-                    mFirebaseAuth.createUserWithEmailAndPassword(email, pw).addOnCompleteListener(Activity_register.this, new OnCompleteListener<AuthResult>() {
+                    databaseController.mFirebaseAuth.createUserWithEmailAndPassword(email, pw).addOnCompleteListener(Activity_register.this, new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if(!task.isSuccessful())
@@ -88,14 +90,14 @@ public class Activity_register extends AppCompatActivity {
                                 //Hashmaps war Java I oder II? Aufjedenfall Collection aus Schlüssel-Wert Paaren, um gleich die Felder zu bestimmen
                                 Map<String, Object> data = new HashMap<>();
                                 data.put(MainActivity.KEY_NAME, username);
-                                data.put("inGroup", false);
+                                data.put("inGroup", true);
                                 data.put("isAdmin", false);
 
                                 Toast.makeText(Activity_register.this,"Erfolgreich registriert!",Toast.LENGTH_SHORT).show();
 
                                 //FireStore kategorisiert in folgener Reihenfolge: Collection(Sammlung) > Document(document) > Feld
                                 //Collection = "User", document = "Email-Adresse", Felder = alle der Hash-Map oben
-                                db.collection("User")
+                                databaseController.db.collection("User")
                                         .document(email)
                                         .set(data)
 

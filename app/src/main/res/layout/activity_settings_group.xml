@@ -17,6 +17,49 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
+        <TextView
+            android:id="@+id/textView11"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/wochentag" />
+
+        <Spinner
+            android:id="@+id/spinnerWeekdays"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:drawable/spinner_background"
+            android:popupBackground="@color/common_google_signin_btn_text_dark_default" />
+
+        <TextView
+            android:id="@+id/textView12"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/btn_interval" />
+
+        <Spinner
+            android:id="@+id/spinnerInterval"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:drawable/spinner_background" />
+
+        <Button
+            android:id="@+id/btnTime"
+            style="@style/Widget.AppCompat.Button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="28dp"
+            android:background="@drawable/custom_button"
+            android:onClick="onClickTimeSelect"
+            android:text="@string/btn_time" />
+
+        <TextView
+            android:id="@+id/textFirstEvening"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:textAlignment="center"
+            android:textColor="#641313"
+            android:textSize="18sp" />
+
         <Button
             android:id="@+id/button8"
             android:layout_width="match_parent"
@@ -29,15 +72,29 @@
             android:id="@+id/textView2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
             android:text="@string/text_isMemberSince" />
 
         <Button
-            android:id="@+id/button12"
+            android:id="@+id/btn_refresh_group"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
             android:background="@drawable/custom_button"
-            android:text="@string/btn_leave_group" />
+            android:onClick="onClickRefreshGroup"
+            android:text="@string/gruppeneinstellungen_aktualisieren" />
+
+        <TextView
+            android:id="@+id/textView10"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="@string/hinweis" />
+
+        <TextView
+            android:id="@+id/textView8"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/text_settings_group_warning" />
 
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

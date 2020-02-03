@@ -64,14 +64,15 @@
 
     <Button
         android:id="@+id/btnCreateGroup"
-        android:layout_width="181dp"
-        android:layout_height="63dp"
-        android:layout_marginBottom="28dp"
+        android:layout_width="143dp"
+        android:layout_height="37dp"
+        android:layout_marginBottom="32dp"
         android:background="@drawable/custom_button"
         android:onClick="onClickGruppenErstellung"
         android:text="@string/btn_Create_group"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.201"
         app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

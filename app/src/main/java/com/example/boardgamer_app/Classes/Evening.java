@@ -8,7 +8,7 @@ public class Evening {
     private short ratingStars;
     private String ratingDescription;
     private boolean isFinished = false; //wird true, wenn Termin in Vergangenheit liegt (Bewertung)
-    private Group group;
+    private GroupProperties group;
 
     //region Getter und Setter
     public short getRatingStars() {
@@ -51,11 +51,11 @@ public class Evening {
         this.currentHost = currentHost;
     }
 
-    public Group getGroup() {
+    public GroupProperties getGroup() {
         return group;
     }
 
-    public void setGroup(Group group) {
+    public void setGroup(GroupProperties group) {
         this.group = group;
     }
     //endregion

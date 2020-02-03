@@ -14,15 +14,10 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
-import com.example.boardgamer_app.Classes.Evening;
-import com.example.boardgamer_app.Classes.Group;
+import com.example.boardgamer_app.Classes.GroupProperties;
 import com.example.boardgamer_app.Classes.TimePickerFragment;
 
 import java.text.SimpleDateFormat;
-import java.time.DayOfWeek;
-import java.time.LocalDate;
-import java.time.Month;
-import java.time.temporal.TemporalAdjusters;
 import java.util.Calendar;
 
 public class Activity_create_group extends AppCompatActivity implements TimePickerDialog.OnTimeSetListener {
@@ -132,7 +127,7 @@ public class Activity_create_group extends AppCompatActivity implements TimePick
         Spinner spinnerInterval = (Spinner) findViewById(R.id.spinnerInterval);
         Button time = (Button) findViewById(R.id.btnTime);
 
-        Group group = new Group();
+        GroupProperties group = new GroupProperties();
         //group.setAdmin();
 
         String toast = "Gruppe erstellt: Uhrzeit: " + time.getText() + ", Wochentag: " + spinnerWeekdays.getSelectedItem().toString() + ", Rhythmus: "+ spinnerInterval.getSelectedItem().toString();
@@ -148,6 +143,8 @@ public class Activity_create_group extends AppCompatActivity implements TimePick
         if (i1 == 0)
         {
             button.setText( i + ":00 Uhr");    //damit bei z.B. 12 Uhr 12:00 angezeigt wird, statt 12:0
+        } else if (i1 < 10) {
+            button.setText( i + ":0" + i1 + " Uhr hi");
         } else
             {
                 button.setText( i + ":" + i1 + " Uhr");

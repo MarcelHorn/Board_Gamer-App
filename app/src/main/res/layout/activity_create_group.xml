@@ -59,7 +59,7 @@
             android:id="@+id/btnCreate"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:onClick="onClickCreateGroup"
+            android:onClick="onClickRefreshGroup"
             android:background="@drawable/custom_button"
             android:text="@string/btn_group_create" />
 

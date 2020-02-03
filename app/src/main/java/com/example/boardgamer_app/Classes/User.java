@@ -6,8 +6,8 @@ public class User {
 
     private int id;
 
-    private String name, mail, city, street, password;
-    private Group group;
+    private String name;
+    private String mail;
 
     //Datum, wann User die Gruppe beigetreten ist.
     private Calendar inGroupSince;
@@ -36,38 +36,6 @@ public class User {
 
     public void setMail(String mail) {
         this.mail = mail;
-    }
-
-    public String getCity() {
-        return city;
-    }
-
-    public void setCity(String city) {
-        this.city = city;
-    }
-
-    public String getStreet() {
-        return street;
-    }
-
-    public void setStreet(String street) {
-        this.street = street;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public Group getGroup() {
-        return group;
-    }
-
-    public void setGroup(Group group) {
-        this.group = group;
     }
 
     public Calendar getInGroupSince() {

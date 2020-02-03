@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.example.boardgamer_app.Classes.DatabaseController;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentReference;
@@ -45,7 +46,11 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void onClickTest (View v) {
+        DatabaseController data = new DatabaseController();
+        Map<String, Object> dataMap = new HashMap<>();
+        dataMap.put("Test", "1");
 
+        data.writeInDatabase("Test", "testDoc", dataMap);
     }
 
     public void onClickNachrichten (View Button) {
