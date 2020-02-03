@@ -13,6 +13,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.Calendar;
 import java.util.Map;
 
 import androidx.annotation.NonNull;
@@ -34,7 +35,7 @@ public class DatabaseController {
                 .document(document)
                 .set(field)
                 //Wenn erfolgreich
-                .addOnSuccessListener(new OnSuccessListener<Void>(){
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void xvoid) {
                         Log.d(DEBUGTAG, "Success!");
@@ -47,6 +48,25 @@ public class DatabaseController {
                         Log.d(DEBUGTAG, "Failure!");
                     }
                 });
+    }
+        public void writeInDatabaseAsCalendar (String collection, String document, Map<String, Calendar> field) {
+            db.collection(collection)
+                    .document(document)
+                    .set(field)
+                    //Wenn erfolgreich
+                    .addOnSuccessListener(new OnSuccessListener<Void>(){
+                        @Override
+                        public void onSuccess(Void xvoid) {
+                            Log.d(DEBUGTAG, "Success!");
+                        }
+                    })
+                    //Bei Lade-Fehler Exception
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Log.d(DEBUGTAG, "Failure!");
+                        }
+                    });
 
     }
 

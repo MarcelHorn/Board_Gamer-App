@@ -12,6 +12,7 @@ import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import com.example.boardgamer_app.Classes.DatabaseController;
 import com.example.boardgamer_app.Classes.GroupProperties;
@@ -27,7 +28,8 @@ public class Main4Activity extends AppCompatActivity implements TimePickerDialog
 
     //DatenbankController: Beinhaltet die FirebaseAuth und FireStore Instanz und diverse Methoden zum schreiben und Lesen
     DatabaseController databaseController = new DatabaseController();
-    String weekday;
+    int weekday, interval;
+    Calendar firstDate;
     Calendar calendar = Calendar.getInstance();
     Spinner spinnerWeekdays, spinnerInterval;
 
@@ -35,8 +37,6 @@ public class Main4Activity extends AppCompatActivity implements TimePickerDialog
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings_group);
-
-
 
         spinnerWeekdays = (Spinner) findViewById(R.id.spinnerWeekdays);
         spinnerInterval = (Spinner) findViewById(R.id.spinnerInterval);
@@ -60,42 +60,13 @@ public class Main4Activity extends AppCompatActivity implements TimePickerDialog
             {
                 String selectedItem = parent.getItemAtPosition(position).toString();
 
-                //Bei "Wochentag wählen..." soll nichts passieren
-                //Andernfalls wird das aktuelle Datum bestimmt mit .getInstance()
-                if (!(selectedItem.equals("Wochentag wählen...") || selectedItem.equals("Rhythmus wählen...")))
-                {
-                    int weekday;
-                    //Jeder Wochentag hat einen Integer wert in der "CALENDAR" Klasse, die werden hier gesetzt:
-                    switch (selectedItem)
-                    {
-                        case "Montags":
-                            weekday = 2;
-                            break;
-                        case "Dienstags":
-                            weekday = 3;
-                            break;
-                        case "Mittwochs":
-                            weekday = 4;
-                            break;
-                        case "Donnerstags":
-                            weekday = 5;
-                            break;
-                        case "Freitags":
-                            weekday = 6;
-                            break;
-                        case "Samstags":
-                            weekday = 7;
-                            break;
-                        case "Sonntags":
-                            weekday = 1;
-                            break;
-                        default:
-                            weekday = 0;
-                            break;
-                    }
 
-                    CalculateFirstEvening(weekday);
-                }
+              if (!(selectedItem.equals("Wochentag wählen...") ))
+               {
+                    CalculateFirstEvening();
+               }
+
+
             }
             //muss man schreiben, falls das Feld mal leer ist...
             public void onNothingSelected(AdapterView<?> parent)
@@ -105,10 +76,58 @@ public class Main4Activity extends AppCompatActivity implements TimePickerDialog
         });
     }
 
+    private void CalculateInterval() {
+        Toast.makeText(Main4Activity.this, spinnerInterval.getSelectedItem().toString(), Toast.LENGTH_LONG).show();
+        switch (spinnerInterval.getSelectedItem().toString())
+        {
+            case "7 Tage":
+                interval = 7;
+                break;
+            case "14 Tage":
+                interval = 14;
+                break;
+            case "28 Tage":
+                interval = 21;
+                break;
+            default:
+                interval = 0;
+                break;
+        }
+    }
+
     //Methode zum Berrechnen des nächsten Wochentages in der Zukunft
-    public void CalculateFirstEvening(int weekday)
+    public Calendar CalculateFirstEvening()
     {
-        Calendar firstDate = calendar;
+        //Toast.makeText(Main4Activity.this, spinnerWeekdays.getSelectedItem().toString(), Toast.LENGTH_LONG).show();
+        switch (spinnerWeekdays.getSelectedItem().toString())
+        {
+            case "Montags":
+                weekday = 2;
+                break;
+            case "Dienstags":
+                weekday = 3;
+                break;
+            case "Mittwochs":
+                weekday = 4;
+                break;
+            case "Donnerstags":
+                weekday = 5;
+                break;
+            case "Freitags":
+                weekday = 6;
+                break;
+            case "Samstags":
+                weekday = 7;
+                break;
+            case "Sonntags":
+                weekday = 1;
+                break;
+            default:
+                weekday = 0;
+                break;
+        }
+        firstDate = calendar;
+        CalculateInterval();
 
         //Solange 1 Tag draufrechnen, bis der geforderte Wochentag erreicht ist
         while (firstDate.get(Calendar.DAY_OF_WEEK) != weekday)
@@ -125,6 +144,7 @@ public class Main4Activity extends AppCompatActivity implements TimePickerDialog
 
         //TODO: Uhrzeit muss berücksichtigt werden, damit Termine nicht in der Vergangenheit liegen(gleicher Tag)
         //Toast.makeText(Activity_create_group.this,date.getTime().toString(),Toast.LENGTH_LONG ).show();
+        return firstDate;
     }
 
     public void onClickRefreshGroup(View view) {
@@ -132,17 +152,42 @@ public class Main4Activity extends AppCompatActivity implements TimePickerDialog
 
         SimpleDateFormat sdfTime = new SimpleDateFormat("HH:mm");
         String time = sdfTime.format(calendar.getTime());
+        CalculateInterval();
 
         Map<String, Object> dataGroup = new HashMap<>();
         dataGroup.put("Wochentag" , calendar.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, Locale.getDefault()));
-        dataGroup.put("Rhythmus", spinnerInterval.getSelectedItem().toString());
+        dataGroup.put("Rhythmus", interval);
         dataGroup.put("Uhrzeit", time);
 
         databaseController.writeInDatabase("Gruppe", "Gruppeneinstellungen", dataGroup);
 
-        
 
 
+        Calendar termin2 = (Calendar) firstDate.clone();
+        termin2.add(Calendar.DATE, interval);
+
+        Calendar termin3 = (Calendar) termin2.clone();
+        termin3.add(Calendar.DATE, interval);
+
+        Calendar termin4 = (Calendar) termin3.clone();
+        termin4.add(Calendar.DATE, interval);
+
+        Calendar termin5 = (Calendar) termin4.clone();
+        termin5.add(Calendar.DATE, interval);
+
+
+
+        Map<String, Calendar> dataEvenings = new HashMap<>();
+        dataEvenings.put("Termin1", firstDate);
+        dataEvenings.put("Termin2", termin2);
+        dataEvenings.put("Termin3", termin3);
+        dataEvenings.put("Termin4", termin4);
+        dataEvenings.put("Termin5", termin5);
+
+
+
+
+        databaseController.writeInDatabaseAsCalendar("Termine", "Anstehende Termine", dataEvenings);
 
 
 
