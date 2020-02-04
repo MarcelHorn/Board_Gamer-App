@@ -4,7 +4,6 @@
     <string name="action_settings">Settings</string>
 
     <string-array name="weekdays">
-        <item>Wochentag wählen...</item>
         <item>Montags</item>
         <item>Dienstags</item>
         <item>Mittwochs</item>
@@ -15,7 +14,6 @@
     </string-array>
 
     <string-array name="intervals">
-        <item>Rhythmus wählen...</item>
         <item>7 Tage</item>
         <item>14 Tage</item>
         <item>28 Tage</item>

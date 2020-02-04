@@ -14,7 +14,9 @@ import android.widget.Toast;
 import com.example.boardgamer_app.Classes.DatabaseController;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
@@ -47,11 +49,21 @@ public class MainActivity extends AppCompatActivity {
 
     public void onClickTest (View v) {
         DatabaseController data = new DatabaseController();
-        Map<String, Object> dataMap = new HashMap<>();
-        dataMap.put("Test", "1");
 
-        data.writeInDatabase("Test", "testDoc", dataMap);
+        data.db.collection(DatabaseController.USER_COL)
+                .document(data.mFirebaseAuth.getCurrentUser().getEmail())
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        if (documentSnapshot.exists()) {
+                            String id = documentSnapshot.getString("id");
+                            Toast.makeText(MainActivity.this, id, Toast.LENGTH_LONG).show();
+                        }
+                    }
+                });
     }
+
 
     public void onClickNachrichten (View Button) {
         Intent changeIntent = new Intent (MainActivity.this, Main2Activity.class);

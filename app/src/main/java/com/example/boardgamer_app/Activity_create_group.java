@@ -20,9 +20,9 @@ import com.example.boardgamer_app.Classes.TimePickerFragment;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
-public class Activity_create_group extends AppCompatActivity implements TimePickerDialog.OnTimeSetListener {
+public class Activity_create_group extends AppCompatActivity /*implements TimePickerDialog.OnTimeSetListener*/ {
 
-
+/*
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -151,4 +151,6 @@ public class Activity_create_group extends AppCompatActivity implements TimePick
             }
 
     }
+
+ */
 }

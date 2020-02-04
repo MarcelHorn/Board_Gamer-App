@@ -97,24 +97,8 @@ public class Activity_register extends AppCompatActivity {
 
                                 //FireStore kategorisiert in folgener Reihenfolge: Collection(Sammlung) > Document(document) > Feld
                                 //Collection = "User", document = "Email-Adresse", Felder = alle der Hash-Map oben
-                                databaseController.db.collection("User")
-                                        .document(email)
-                                        .set(data)
+                                databaseController.writeInDatabase(DatabaseController.USER_COL, email, data);
 
-                                        //Wenn erfolgreich
-                                        .addOnSuccessListener(new OnSuccessListener<Void>(){
-                                            @Override
-                                            public void onSuccess(Void aVoid) {
-                                                Toast.makeText(Activity_register.this,"Daten geladen", Toast.LENGTH_LONG).show();
-                                            }
-                                        })
-                                        //Bei Lade-Fehler Exception
-                                        .addOnFailureListener(new OnFailureListener() {
-                                        @Override
-                                        public void onFailure(@NonNull Exception e) {
-                                            Log.d(TAG, "onFailure: " + e.toString());
-                                        }
-                                    });
 
                                 startActivity(new Intent(Activity_register.this,MainActivity.class));
                             }

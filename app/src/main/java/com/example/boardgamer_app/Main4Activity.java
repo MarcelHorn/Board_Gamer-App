@@ -10,13 +10,14 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.example.boardgamer_app.Classes.DatabaseController;
-import com.example.boardgamer_app.Classes.GroupProperties;
 import com.example.boardgamer_app.Classes.TimePickerFragment;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.Timestamp;
+import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -50,7 +51,7 @@ public class Main4Activity extends AppCompatActivity implements TimePickerDialog
         //Intervall Adapter
         ArrayAdapter<String> adapterInterval = new ArrayAdapter<String>(Main4Activity.this,
                 android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.intervals));
-        adapterWeekdays.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        adapterInterval.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerInterval.setAdapter(adapterInterval);
 
         //Listener zum Abfangen beim auswählen eines Wochentages
@@ -60,13 +61,6 @@ public class Main4Activity extends AppCompatActivity implements TimePickerDialog
             {
                 String selectedItem = parent.getItemAtPosition(position).toString();
 
-
-              if (!(selectedItem.equals("Wochentag wählen...") ))
-               {
-                    CalculateFirstEvening();
-               }
-
-
             }
             //muss man schreiben, falls das Feld mal leer ist...
             public void onNothingSelected(AdapterView<?> parent)
@@ -74,6 +68,24 @@ public class Main4Activity extends AppCompatActivity implements TimePickerDialog
 
             }
         });
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        databaseController.db.collection(DatabaseController.EVENING_COL)
+                .document("Anstehende Termine")
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        if (documentSnapshot.exists()) {
+                            Timestamp evening =  documentSnapshot.getTimestamp("Termin1");
+
+                            Toast.makeText(Main4Activity.this, evening.toDate().toString(),Toast.LENGTH_LONG).show();
+                        }
+                    }
+                });
     }
 
     private void CalculateInterval() {
@@ -96,7 +108,7 @@ public class Main4Activity extends AppCompatActivity implements TimePickerDialog
     }
 
     //Methode zum Berrechnen des nächsten Wochentages in der Zukunft
-    public Calendar CalculateFirstEvening()
+    public void CalculateFirstEvening()
     {
         //Toast.makeText(Main4Activity.this, spinnerWeekdays.getSelectedItem().toString(), Toast.LENGTH_LONG).show();
         switch (spinnerWeekdays.getSelectedItem().toString())
@@ -126,8 +138,9 @@ public class Main4Activity extends AppCompatActivity implements TimePickerDialog
                 weekday = 0;
                 break;
         }
-        firstDate = calendar;
-        CalculateInterval();
+
+        firstDate = (Calendar) calendar.clone();
+
 
         //Solange 1 Tag draufrechnen, bis der geforderte Wochentag erreicht ist
         while (firstDate.get(Calendar.DAY_OF_WEEK) != weekday)
@@ -135,16 +148,16 @@ public class Main4Activity extends AppCompatActivity implements TimePickerDialog
             firstDate.add(Calendar.DATE, 1);
         }
 
-        TextView textFirstEvening = (TextView) findViewById(R.id.textFirstEvening);
+        //TextView textFirstEvening = (TextView) findViewById(R.id.textFirstEvening);
         //Format ändern auf dd.MM.yyyy zur Übersicht
-        SimpleDateFormat df = new SimpleDateFormat("EEEE dd.MM.yyyy");
-        String formattedDate = df.format(firstDate.getTime());
+        //SimpleDateFormat df = new SimpleDateFormat("EEEE dd.MM.yyyy");
+        //String formattedDate = df.format(firstDate.getTime());
         ////
-        textFirstEvening.setText("Erster Spieleabend findet am "  + formattedDate + " statt.");
+        //textFirstEvening.setText("Erster Spieleabend findet am "  + formattedDate + " statt.");
 
         //TODO: Uhrzeit muss berücksichtigt werden, damit Termine nicht in der Vergangenheit liegen(gleicher Tag)
         //Toast.makeText(Activity_create_group.this,date.getTime().toString(),Toast.LENGTH_LONG ).show();
-        return firstDate;
+
     }
 
     public void onClickRefreshGroup(View view) {
@@ -153,41 +166,47 @@ public class Main4Activity extends AppCompatActivity implements TimePickerDialog
         SimpleDateFormat sdfTime = new SimpleDateFormat("HH:mm");
         String time = sdfTime.format(calendar.getTime());
         CalculateInterval();
+        CalculateFirstEvening();
 
         Map<String, Object> dataGroup = new HashMap<>();
-        dataGroup.put("Wochentag" , calendar.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, Locale.getDefault()));
+        dataGroup.put("Wochentag" , firstDate.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, Locale.getDefault()));
         dataGroup.put("Rhythmus", interval);
         dataGroup.put("Uhrzeit", time);
 
         databaseController.writeInDatabase("Gruppe", "Gruppeneinstellungen", dataGroup);
 
+        Timestamp timestamp = new Timestamp(firstDate.getTime());
 
 
         Calendar termin2 = (Calendar) firstDate.clone();
         termin2.add(Calendar.DATE, interval);
+        Timestamp timestamp2 = new Timestamp(termin2.getTime());
 
         Calendar termin3 = (Calendar) termin2.clone();
         termin3.add(Calendar.DATE, interval);
+        Timestamp timestamp3 = new Timestamp(termin3.getTime());
 
         Calendar termin4 = (Calendar) termin3.clone();
         termin4.add(Calendar.DATE, interval);
+        Timestamp timestamp4 = new Timestamp(termin4.getTime());
 
         Calendar termin5 = (Calendar) termin4.clone();
         termin5.add(Calendar.DATE, interval);
+        Timestamp timestamp5 = new Timestamp(termin5.getTime());
 
 
 
-        Map<String, Calendar> dataEvenings = new HashMap<>();
-        dataEvenings.put("Termin1", firstDate);
-        dataEvenings.put("Termin2", termin2);
-        dataEvenings.put("Termin3", termin3);
-        dataEvenings.put("Termin4", termin4);
-        dataEvenings.put("Termin5", termin5);
+        Map<String, Timestamp> dataEvenings = new HashMap<>();
+        dataEvenings.put("Termin1", timestamp);
+        dataEvenings.put("Termin2", timestamp2);
+        dataEvenings.put("Termin3", timestamp3);
+        dataEvenings.put("Termin4", timestamp4);
+        dataEvenings.put("Termin5", timestamp5);
 
 
 
 
-        databaseController.writeInDatabaseAsCalendar("Termine", "Anstehende Termine", dataEvenings);
+        databaseController.writeInDatabaseAsTimestamp("Termine", "Anstehende Termine", dataEvenings);
 
 
 
