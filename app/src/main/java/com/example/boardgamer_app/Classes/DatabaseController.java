@@ -27,6 +27,7 @@ public class DatabaseController {
     public final static String USER_COL = "User";
     public final static String EVENING_COL = "Termine";
     public final static String GROUP_COL = "Gruppe";
+    public final static String GROUP_SETTINGS_DOC = "Gruppeneinstellungen";
 
     public FirebaseAuth mFirebaseAuth;
     public FirebaseFirestore db;

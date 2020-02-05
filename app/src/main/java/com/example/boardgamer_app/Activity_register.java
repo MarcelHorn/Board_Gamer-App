@@ -18,6 +18,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
@@ -87,20 +88,39 @@ public class Activity_register extends AppCompatActivity {
                             }
                             else
                             {
-                                //Hashmaps war Java I oder II? Aufjedenfall Collection aus Schlüssel-Wert Paaren, um gleich die Felder zu bestimmen
-                                Map<String, Object> data = new HashMap<>();
-                                data.put(MainActivity.KEY_NAME, username);
-                                data.put("inGroup", true);
-                                data.put("isAdmin", false);
+                                databaseController.db.collection(DatabaseController.GROUP_COL)
+                                        .document(DatabaseController.GROUP_SETTINGS_DOC)
+                                        .get()
+                                        .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                            @Override
+                                            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                                if (documentSnapshot.exists()) {
+                                                    int idIndex = documentSnapshot.getLong("AnzahlMitgliederIndex").intValue();
+                                                    idIndex = idIndex + 1;
 
-                                Toast.makeText(Activity_register.this,"Erfolgreich registriert!",Toast.LENGTH_SHORT).show();
+                                                    //Hashmaps war Java I oder II? Aufjedenfall Collection aus Schlüssel-Wert Paaren, um gleich die Felder zu bestimmen
+                                                    Map<String, Object> data = new HashMap<>();
+                                                    data.put(MainActivity.KEY_NAME, username);
+                                                    data.put("inGroup", true);
+                                                    data.put("isAdmin", false);
+                                                    data.put("id", idIndex);
 
-                                //FireStore kategorisiert in folgener Reihenfolge: Collection(Sammlung) > Document(document) > Feld
-                                //Collection = "User", document = "Email-Adresse", Felder = alle der Hash-Map oben
-                                databaseController.writeInDatabase(DatabaseController.USER_COL, email, data);
+
+                                                    Toast.makeText(Activity_register.this, "Erfolgreich registriert!", Toast.LENGTH_SHORT).show();
+
+                                                    //FireStore kategorisiert in folgener Reihenfolge: Collection(Sammlung) > Document(document) > Feld
+                                                    //Collection = "User", document = "Email-Adresse", Felder = alle der Hash-Map oben
+                                                    databaseController.writeInDatabase(DatabaseController.USER_COL, email.toLowerCase(), data);
+                                                    databaseController.db.collection(DatabaseController.GROUP_COL)
+                                                            .document(DatabaseController.GROUP_SETTINGS_DOC)
+                                                            .update("AnzahlMitgliederIndex", idIndex);
 
 
-                                startActivity(new Intent(Activity_register.this,MainActivity.class));
+                                                    startActivity(new Intent(Activity_register.this, MainActivity.class));
+                                                }
+                                            }
+                                        });
+
                             }
                         }
                     });

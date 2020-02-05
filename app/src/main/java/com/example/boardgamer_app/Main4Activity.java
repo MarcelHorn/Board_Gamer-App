@@ -29,10 +29,11 @@ public class Main4Activity extends AppCompatActivity implements TimePickerDialog
 
     //DatenbankController: Beinhaltet die FirebaseAuth und FireStore Instanz und diverse Methoden zum schreiben und Lesen
     DatabaseController databaseController = new DatabaseController();
-    int weekday, interval;
+    int weekday, interval, intervalIndex;
     Calendar firstDate;
     Calendar calendar = Calendar.getInstance();
     Spinner spinnerWeekdays, spinnerInterval;
+    Button button;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +42,7 @@ public class Main4Activity extends AppCompatActivity implements TimePickerDialog
 
         spinnerWeekdays = (Spinner) findViewById(R.id.spinnerWeekdays);
         spinnerInterval = (Spinner) findViewById(R.id.spinnerInterval);
+        button = findViewById(R.id.btnTime);
 
         //Wochentag Adapter
         ArrayAdapter<String> adapterWeekdays = new ArrayAdapter<String>(Main4Activity.this,
@@ -81,11 +83,28 @@ public class Main4Activity extends AppCompatActivity implements TimePickerDialog
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
                         if (documentSnapshot.exists()) {
                             Timestamp evening =  documentSnapshot.getTimestamp("Termin1");
-
                             Toast.makeText(Main4Activity.this, evening.toDate().toString(),Toast.LENGTH_LONG).show();
                         }
                     }
                 });
+
+        databaseController.db.collection(DatabaseController.GROUP_COL)
+                .document(DatabaseController.GROUP_SETTINGS_DOC)
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                          int interval = documentSnapshot.getLong("RhythmusIndex").intValue();
+                          String time = documentSnapshot.getString("Uhrzeit");
+                          int weekday = documentSnapshot.getLong("Wochentag").intValue();
+
+                          spinnerWeekdays.setSelection(weekday-1);
+                          spinnerInterval.setSelection(interval);
+                          button.setText(time + " Uhr");
+                    }
+                });
+
+
     }
 
     private void CalculateInterval() {
@@ -94,15 +113,19 @@ public class Main4Activity extends AppCompatActivity implements TimePickerDialog
         {
             case "7 Tage":
                 interval = 7;
+                intervalIndex = 0;
                 break;
             case "14 Tage":
                 interval = 14;
+                intervalIndex = 1;
                 break;
             case "28 Tage":
                 interval = 21;
+                intervalIndex = 2;
                 break;
             default:
                 interval = 0;
+                intervalIndex = 0;
                 break;
         }
     }
@@ -169,11 +192,14 @@ public class Main4Activity extends AppCompatActivity implements TimePickerDialog
         CalculateFirstEvening();
 
         Map<String, Object> dataGroup = new HashMap<>();
-        dataGroup.put("Wochentag" , firstDate.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, Locale.getDefault()));
-        dataGroup.put("Rhythmus", interval);
+        dataGroup.put("Wochentag" , weekday);
+        dataGroup.put("Rhythmus", firstDate.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, Locale.getDefault()));
+        dataGroup.put("RhythmusIndex", intervalIndex);
         dataGroup.put("Uhrzeit", time);
+        //dataGroup.put("AnzahlMitgliederIndex", 3);
 
-        databaseController.writeInDatabase("Gruppe", "Gruppeneinstellungen", dataGroup);
+
+        databaseController.writeInDatabase(DatabaseController.GROUP_COL, DatabaseController.GROUP_SETTINGS_DOC, dataGroup);
 
         Timestamp timestamp = new Timestamp(firstDate.getTime());
 
@@ -224,7 +250,7 @@ public class Main4Activity extends AppCompatActivity implements TimePickerDialog
         calendar.set(Calendar.HOUR_OF_DAY, i);
         calendar.set(Calendar.MINUTE, i1);
 
-        Button button =findViewById(R.id.btnTime);
+
         if (i1 == 0)
         {
             button.setText( i + ":00 Uhr");    //damit bei z.B. 12 Uhr 12:00 angezeigt wird, statt 12:0

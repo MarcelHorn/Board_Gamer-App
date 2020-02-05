@@ -21,6 +21,7 @@
             android:id="@+id/textView11"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
             android:text="@string/wochentag" />
 
         <Spinner
@@ -42,12 +43,19 @@
             android:layout_height="wrap_content"
             android:background="@android:drawable/spinner_background" />
 
+        <TextView
+            android:id="@+id/textView13"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="@string/Text_uhrzeit" />
+
         <Button
             android:id="@+id/btnTime"
             style="@style/Widget.AppCompat.Button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="28dp"
+            android:layout_marginRight="150dp"
             android:background="@drawable/custom_button"
             android:onClick="onClickTimeSelect"
             android:text="@string/btn_time" />
@@ -69,21 +77,6 @@
             android:text="@string/btn_show_group_member" />
 
         <TextView
-            android:id="@+id/textView2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            android:text="@string/text_isMemberSince" />
-
-        <Button
-            android:id="@+id/btn_refresh_group"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/custom_button"
-            android:onClick="onClickRefreshGroup"
-            android:text="@string/gruppeneinstellungen_aktualisieren" />
-
-        <TextView
             android:id="@+id/textView10"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -95,6 +88,15 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/text_settings_group_warning" />
+
+        <Button
+            android:id="@+id/btn_refresh_group"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/custom_button"
+            android:onClick="onClickRefreshGroup"
+            android:text="@string/gruppeneinstellungen_aktualisieren" />
 
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
