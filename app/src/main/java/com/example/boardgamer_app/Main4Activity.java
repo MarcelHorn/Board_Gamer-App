@@ -1,10 +1,12 @@
 package com.example.boardgamer_app;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
 
 import android.app.TimePickerDialog;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -14,31 +16,61 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.example.boardgamer_app.Classes.DatabaseController;
+import com.example.boardgamer_app.Classes.Evening;
 import com.example.boardgamer_app.Classes.TimePickerFragment;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+
+
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.Timestamp;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
 public class Main4Activity extends AppCompatActivity implements TimePickerDialog.OnTimeSetListener{
 
+    //Interface Callback Funktion
+    private interface FirestoreCallback {
+        void onCallback(List<Integer> userIdList);
+    }
+
     //DatenbankController: Beinhaltet die FirebaseAuth und FireStore Instanz und diverse Methoden zum schreiben und Lesen
     DatabaseController databaseController = new DatabaseController();
-    int weekday, interval, intervalIndex;
+    int weekday, interval, intervalIndex, lastOrganizer, memberCount;
     Calendar firstDate;
     Calendar calendar = Calendar.getInstance();
+    CollectionReference userCollection = databaseController.db.collection(DatabaseController.USER_COL);
     Spinner spinnerWeekdays, spinnerInterval;
     Button button;
+    Evening evening = new Evening();
+    ArrayList<Integer> userIdList = new ArrayList();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings_group);
+
+        CollectionReference userCollection = databaseController.db.collection(DatabaseController.USER_COL);
+
+        databaseController.db.collection(DatabaseController.GROUP_COL)
+                .document(DatabaseController.GROUP_SETTINGS_DOC)
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                            lastOrganizer = documentSnapshot.getLong("lastOrganizer").intValue();
+                    }
+                });
 
         spinnerWeekdays = (Spinner) findViewById(R.id.spinnerWeekdays);
         spinnerInterval = (Spinner) findViewById(R.id.spinnerInterval);
@@ -75,18 +107,6 @@ public class Main4Activity extends AppCompatActivity implements TimePickerDialog
     @Override
     protected void onStart() {
         super.onStart();
-        databaseController.db.collection(DatabaseController.EVENING_COL)
-                .document("Anstehende Termine")
-                .get()
-                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                    @Override
-                    public void onSuccess(DocumentSnapshot documentSnapshot) {
-                        if (documentSnapshot.exists()) {
-                            Timestamp evening =  documentSnapshot.getTimestamp("Termin1");
-                            Toast.makeText(Main4Activity.this, evening.toDate().toString(),Toast.LENGTH_LONG).show();
-                        }
-                    }
-                });
 
         databaseController.db.collection(DatabaseController.GROUP_COL)
                 .document(DatabaseController.GROUP_SETTINGS_DOC)
@@ -97,14 +117,12 @@ public class Main4Activity extends AppCompatActivity implements TimePickerDialog
                           int interval = documentSnapshot.getLong("RhythmusIndex").intValue();
                           String time = documentSnapshot.getString("Uhrzeit");
                           int weekday = documentSnapshot.getLong("Wochentag").intValue();
-
+                          memberCount = documentSnapshot.getLong("AnzahlMitgliederIndex").intValue();
                           spinnerWeekdays.setSelection(weekday-1);
                           spinnerInterval.setSelection(interval);
                           button.setText(time + " Uhr");
                     }
                 });
-
-
     }
 
     private void CalculateInterval() {
@@ -199,10 +217,10 @@ public class Main4Activity extends AppCompatActivity implements TimePickerDialog
         //dataGroup.put("AnzahlMitgliederIndex", 3);
 
 
-        databaseController.writeInDatabase(DatabaseController.GROUP_COL, DatabaseController.GROUP_SETTINGS_DOC, dataGroup);
+        databaseController.UpdateDatabase(DatabaseController.GROUP_COL, DatabaseController.GROUP_SETTINGS_DOC, dataGroup);
 
+        //Berechnung der 5 Termine basierend am Rhythmus
         Timestamp timestamp = new Timestamp(firstDate.getTime());
-
 
         Calendar termin2 = (Calendar) firstDate.clone();
         termin2.add(Calendar.DATE, interval);
@@ -222,21 +240,126 @@ public class Main4Activity extends AppCompatActivity implements TimePickerDialog
 
 
 
-        Map<String, Timestamp> dataEvenings = new HashMap<>();
-        dataEvenings.put("Termin1", timestamp);
-        dataEvenings.put("Termin2", timestamp2);
-        dataEvenings.put("Termin3", timestamp3);
-        dataEvenings.put("Termin4", timestamp4);
-        dataEvenings.put("Termin5", timestamp5);
+        //Die Callback Funktion ist nötig, da das Laden aus der DB asynchron zum normalen Codeverlauf abläuft (Daten werden ausgelesen bevor sie geladen sind)
+        ReadUserId(new FirestoreCallback() {
+            @Override
+            public void onCallback(List<Integer> userIdList) {
+            }
+        });
+
+        //erster Termin
+        evening.setDate(timestamp);
+        evening.setEveningName("Termin1");
+        for (int i = 0; i<userIdList.size(); i++)
+        {
+            if (lastOrganizer > memberCount) {
+                lastOrganizer = 1;
+            }
+            if (lastOrganizer == userIdList.get(i)) {
+                lastOrganizer += 1;
+                Map<String, Object> dataDate = new HashMap<>();
+                dataDate.put("Organizer", userIdList.get(i));
+                dataDate.put("Datum", evening.getDate());
+                databaseController.writeInDatabase(DatabaseController.EVENING_COL, evening.getEveningName(), dataDate);
+                break;
+            }
+        }
+
+        //Zweiter termin
+        evening.setDate(timestamp2);
+        evening.setEveningName("Termin2");
+        for (int i = 0; i<userIdList.size(); i++)
+        {
+            if (lastOrganizer > memberCount) {
+                lastOrganizer = 1;
+            }
+            if (lastOrganizer == userIdList.get(i)) {
+                lastOrganizer += 1;
+                Map<String, Object> dataDate2 = new HashMap<>();
+                dataDate2.put("Organizer", userIdList.get(i));
+                dataDate2.put("Datum", evening.getDate());
+                databaseController.writeInDatabase(DatabaseController.EVENING_COL, evening.getEveningName(), dataDate2);
+                break;
+            }
+        }
+
+        //dritter Termin
+        evening.setDate(timestamp3);
+        evening.setEveningName("Termin3");
+        for (int i = 0; i<userIdList.size(); i++)
+        {
+            if (lastOrganizer > memberCount) {
+                lastOrganizer = 1;
+            }
+            if (lastOrganizer == userIdList.get(i)) {
+                lastOrganizer += 1;
+                Map<String, Object> dataDate3 = new HashMap<>();
+                dataDate3.put("Organizer", userIdList.get(i));
+                dataDate3.put("Datum", evening.getDate());
+                databaseController.writeInDatabase(DatabaseController.EVENING_COL, evening.getEveningName(), dataDate3);
+                break;
+            }
+        }
+
+        //vierter Termin
+        evening.setDate(timestamp4);
+        evening.setEveningName("Termin4");
+        for (int i = 0; i<userIdList.size(); i++)
+        {
+            if (lastOrganizer > memberCount) {
+                lastOrganizer = 1;
+            }
+            if (lastOrganizer == userIdList.get(i)) {
+                lastOrganizer += 1;
+                Map<String, Object> dataDate4 = new HashMap<>();
+                dataDate4.put("Organizer", userIdList.get(i));
+                dataDate4.put("Datum", evening.getDate());
+                databaseController.writeInDatabase(DatabaseController.EVENING_COL, evening.getEveningName(), dataDate4);
+                break;
+            }
+        }
+
+        //fünfter Termin
+        evening.setDate(timestamp5);
+        evening.setEveningName("Termin5");
+        for (int i = 0; i<userIdList.size(); i++)
+        {
+            if (lastOrganizer > memberCount) {
+                lastOrganizer = 1;
+            }
+            if (lastOrganizer == userIdList.get(i)) {
+                lastOrganizer += 1;
+                Map<String, Object> dataDate5 = new HashMap<>();
+                dataDate5.put("Organizer", userIdList.get(i));
+                dataDate5.put("Datum", evening.getDate());
+                databaseController.writeInDatabase(DatabaseController.EVENING_COL, evening.getEveningName(), dataDate5);
+                break;
+            }
+        }
 
 
-
-
-        databaseController.writeInDatabaseAsTimestamp("Termine", "Anstehende Termine", dataEvenings);
-
-
-
+        //Updatet am Ende den "lastOrganizer", also der Veranstallter des 5.ten Termins, damit beim nächsten Terminupdate die Reihenfolge fortgesetzt wird
+        Map<String, Object> lastOrganizer = new HashMap<>();
+        databaseController.UpdateDatabase(DatabaseController.GROUP_COL,DatabaseController.GROUP_SETTINGS_DOC,lastOrganizer);
     }
+
+    //Methode zur Callback Funktion
+    private void ReadUserId(final FirestoreCallback firestoreCallback) {
+        userCollection.get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (DocumentSnapshot snapshots : task.getResult()) {
+                                int id = snapshots.getLong("id").intValue();
+                                userIdList.add(id);
+                            }
+                            firestoreCallback.onCallback(userIdList);
+                        }
+                    }
+                });
+    }
+
 
     public void onClickTimeSelect(View view) {
         DialogFragment timePicker = new TimePickerFragment();
@@ -249,8 +372,6 @@ public class Main4Activity extends AppCompatActivity implements TimePickerDialog
     {
         calendar.set(Calendar.HOUR_OF_DAY, i);
         calendar.set(Calendar.MINUTE, i1);
-
-
         if (i1 == 0)
         {
             button.setText( i + ":00 Uhr");    //damit bei z.B. 12 Uhr 12:00 angezeigt wird, statt 12:0
@@ -260,7 +381,8 @@ public class Main4Activity extends AppCompatActivity implements TimePickerDialog
             {
             button.setText( i + ":" + i1 + " Uhr");
         }
-
     }
+
+
     }
 

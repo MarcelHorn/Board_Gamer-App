@@ -1,63 +1,46 @@
 package com.example.boardgamer_app.Classes;
 
+
+import com.google.firebase.Timestamp;
+
 import java.util.Calendar;
 
 public class Evening {
-    private User currentHost;
-    private Calendar date;  //Tag und Uhrzeit
-    private short ratingStars;
-    private String ratingDescription;
-    private boolean isFinished = false; //wird true, wenn Termin in Vergangenheit liegt (Bewertung)
-    private GroupProperties group;
 
-    //region Getter und Setter
-    public short getRatingStars() {
-        return ratingStars;
+    private Timestamp date;
+    private String EveningName;
+    private int organizerId;
+
+    public String getEveningName() {
+        return EveningName;
     }
 
-    public void setRatingStars(short ratingStars) {
-        this.ratingStars = ratingStars;
+    public void setEveningName(String eveningName) {
+        EveningName = eveningName;
     }
 
-    public String getRatingDescription() {
-        return ratingDescription;
+
+
+
+
+    public int getOrganizerId() {
+        return organizerId;
     }
 
-    public void setRatingDescription(String ratingDescription) {
-        this.ratingDescription = ratingDescription;
+    public void setOrganizerId(int organizerId) {
+        this.organizerId = organizerId;
     }
 
-    public boolean isFinished() {
-        return isFinished;
-    }
 
-    public void setFinished(boolean finished) {
-        isFinished = finished;
-    }
 
-    public Calendar getDate() {
+    public Timestamp getDate() {
         return date;
     }
 
-    public void setDate(Calendar date) {
+    public void setDate(Timestamp date) {
         this.date = date;
     }
 
-    public User getCurrentHost() {
-        return currentHost;
-    }
 
-    public void setCurrentHost(User currentHost) {
-        this.currentHost = currentHost;
-    }
-
-    public GroupProperties getGroup() {
-        return group;
-    }
-
-    public void setGroup(GroupProperties group) {
-        this.group = group;
-    }
-    //endregion
 
 }
