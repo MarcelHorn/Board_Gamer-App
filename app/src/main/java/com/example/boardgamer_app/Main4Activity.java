@@ -339,8 +339,9 @@ public class Main4Activity extends AppCompatActivity implements TimePickerDialog
 
 
         //Updatet am Ende den "lastOrganizer", also der Veranstallter des 5.ten Termins, damit beim nächsten Terminupdate die Reihenfolge fortgesetzt wird
-        Map<String, Object> lastOrganizer = new HashMap<>();
-        databaseController.UpdateDatabase(DatabaseController.GROUP_COL,DatabaseController.GROUP_SETTINGS_DOC,lastOrganizer);
+        Map<String, Object> lastOrganizerData = new HashMap<>();
+        lastOrganizerData.put("lastOrganizer", lastOrganizer);
+        databaseController.UpdateDatabase(DatabaseController.GROUP_COL,DatabaseController.GROUP_SETTINGS_DOC,lastOrganizerData);
     }
 
     //Methode zur Callback Funktion
