@@ -23,13 +23,6 @@ public class DatabaseController {
 
     public FirebaseAuth mFirebaseAuth;
     public FirebaseFirestore db;
-    private String keyPlaceholder;
-
-    public String getResult() {
-        return result;
-    }
-
-    private String result;
 
     public DatabaseController() {
         mFirebaseAuth = FirebaseAuth.getInstance();
@@ -76,5 +69,13 @@ public class DatabaseController {
                         Log.d(DEBUGTAG, "Failure!");
                     }
                 });
+    }
+
+    public void GenerateNewEvening() {
+        //TODO: Wenn ein Termin abgehalten wurde, muss 1 neuer Termin erstellt werden
+    }
+
+    public void SetEveningAsCompleted() {
+        //TODO: Verschiebe abgehaltenen Termin von Anstehende Termine zu vergangende Termine
     }
 }

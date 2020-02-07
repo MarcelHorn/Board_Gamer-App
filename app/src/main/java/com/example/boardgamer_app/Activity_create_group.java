@@ -1,24 +1,6 @@
 package com.example.boardgamer_app;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.DialogFragment;
-
-import android.app.TimePickerDialog;
-import android.os.Bundle;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.Spinner;
-import android.widget.TextView;
-import android.widget.TimePicker;
-import android.widget.Toast;
-
-import com.example.boardgamer_app.Classes.GroupProperties;
-import com.example.boardgamer_app.Classes.TimePickerFragment;
-
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
 
 public class Activity_create_group extends AppCompatActivity /*implements TimePickerDialog.OnTimeSetListener*/ {
 
@@ -112,7 +94,7 @@ public class Activity_create_group extends AppCompatActivity /*implements TimePi
         ////
         textFirstEvening.setText("Erster Spieleabend findet am "  + formattedDate + " statt.");
 
-        //TODO: Uhrzeit muss berücksichtigt werden, damit Termine nicht in der Vergangenheit liegen(gleicher Tag)
+
         //Toast.makeText(Activity_create_group.this,date.getTime().toString(),Toast.LENGTH_LONG ).show();
     }
 
@@ -127,8 +109,7 @@ public class Activity_create_group extends AppCompatActivity /*implements TimePi
         Spinner spinnerInterval = (Spinner) findViewById(R.id.spinnerInterval);
         Button time = (Button) findViewById(R.id.btnTime);
 
-        GroupProperties group = new GroupProperties();
-        //group.setAdmin();
+
 
         String toast = "Gruppe erstellt: Uhrzeit: " + time.getText() + ", Wochentag: " + spinnerWeekdays.getSelectedItem().toString() + ", Rhythmus: "+ spinnerInterval.getSelectedItem().toString();
         Toast.makeText(Activity_create_group.this,toast,Toast.LENGTH_LONG ).show();

@@ -45,5 +45,62 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="TextView" />
+
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fillViewport="true">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <Button
+                    android:id="@+id/btnEvening1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/custom_button"
+                    android:paddingLeft="20dp"
+                    android:text="Button"
+                    android:textAlignment="viewStart" />
+
+                <Button
+                    android:id="@+id/btnEvening2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/custom_button"
+                    android:paddingLeft="20dp"
+                    android:text="Button"
+                    android:textAlignment="viewStart" />
+
+                <Button
+                    android:id="@+id/btnEvening3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/custom_button"
+                    android:paddingLeft="20dp"
+                    android:text="Button"
+                    android:textAlignment="viewStart" />
+
+                <Button
+                    android:id="@+id/btnEvening4"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/custom_button"
+                    android:paddingLeft="20dp"
+                    android:text="Button"
+                    android:textAlignment="viewStart" />
+
+                <Button
+                    android:id="@+id/btnEvening5"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/custom_button"
+                    android:paddingLeft="20dp"
+                    android:text="Button"
+                    android:textAlignment="viewStart" />
+            </LinearLayout>
+        </androidx.core.widget.NestedScrollView>
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
