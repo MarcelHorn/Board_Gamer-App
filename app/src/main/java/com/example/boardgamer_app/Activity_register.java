@@ -111,10 +111,7 @@ public class Activity_register extends AppCompatActivity {
                                                     //FireStore kategorisiert in folgener Reihenfolge: Collection(Sammlung) > Document(document) > Feld
                                                     //Collection = "User", document = "Email-Adresse", Felder = alle der Hash-Map oben
                                                     databaseController.writeInDatabase(DatabaseController.USER_COL, email.toLowerCase(), data);
-                                                    databaseController.db.collection(DatabaseController.GROUP_COL)
-                                                            .document(DatabaseController.GROUP_SETTINGS_DOC)
-                                                            .update("AnzahlMitgliederIndex", idIndex);
-
+                                                    databaseController.UpdateDatabaseOneField(DatabaseController.GROUP_COL,DatabaseController.GROUP_SETTINGS_DOC,"AnzahlMitgliederIndex", idIndex);
 
                                                     startActivity(new Intent(Activity_register.this, MainActivity.class));
                                                 }

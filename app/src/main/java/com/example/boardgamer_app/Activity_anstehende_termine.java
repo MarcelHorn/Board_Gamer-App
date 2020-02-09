@@ -6,7 +6,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.os.Debug;
 import android.util.Log;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,6 +36,9 @@ public class Activity_anstehende_termine extends AppCompatActivity {
         void onCallback(List<Timestamp> eveningTimestampList, List<Integer> eveningOrganizerList);
     }
 
+    private ListView listView;
+    private ArrayList<String> listViewObjects;
+    private ArrayAdapter<String> eveningAdapter;
     CollectionReference eveningCollection;
     TextView mTermin1TextView;
     TextView mTermin2TextView;
@@ -45,39 +50,16 @@ public class Activity_anstehende_termine extends AppCompatActivity {
     //Nachfolgend alles DB-Anbindung
 
     DatabaseController databaseController = new DatabaseController();
-    DatabaseReference mRootRef = FirebaseDatabase.getInstance().getReference();
-
-    //Termin1 ist die Bezeichnung des Datenbankobjekts
-
-
-
-    DatabaseReference mConditionRef = mRootRef.child("termin1");
-    DatabaseReference mConditionRef2 = mRootRef.child("termin2");
-    DatabaseReference mConditionRef3 = mRootRef.child("termin3");
-
-
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_anstehende_termine);
 
+        listViewObjects = new ArrayList<>();
         eveningCollection = databaseController.db.collection(DatabaseController.EVENING_COL);
+        listView = findViewById(R.id.listview);
 
-        buttons[0] = (Button) findViewById(R.id.btnEvening1);
-        buttons[1] = (Button) findViewById(R.id.btnEvening2);
-        buttons[2] = (Button) findViewById(R.id.btnEvening3);
-        buttons[3] = (Button) findViewById(R.id.btnEvening4);
-        buttons[4] = (Button) findViewById(R.id.btnEvening5);
-
-
-
-
-        mTermin1TextView = (TextView)findViewById(R.id.textViewTermin1);
-        mTermin2TextView = (TextView)findViewById(R.id.textViewTermin2);
-        mTermin3TextView = (TextView)findViewById(R.id.textViewTermin3);
 
     }
 
@@ -85,69 +67,27 @@ public class Activity_anstehende_termine extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
+
+
         ReadEveningTimestamps(new FirestoreCallback() {
             @Override
             public void onCallback(List<Timestamp> eveningTimestampList, List<Integer> eveningOrganizerList) {
-                SimpleDateFormat sdfTime = new SimpleDateFormat("dd.MM.yyyy - HH:mm");
+
+
+                SimpleDateFormat sdfTime = new SimpleDateFormat("EEE dd.MM.yyyy - HH:mm");
                 for(int i = 0; i < timestampList.size(); i++) {
 
-                    Log.d(DatabaseController.DEBUGTAG,timestampList.get(i).toString());
-                    Log.d(DatabaseController.DEBUGTAG,eveningOrganizerList.get(i).toString());
                     String time = sdfTime.format(timestampList.get(i).toDate());
-                    buttons[i].setText(time + " Uhr, Bei: " + eveningOrganizerList.get(i).toString());
+                    listViewObjects.add(time + " Bei: " + eveningOrganizerList.get(i).toString());
+                    //buttons[i].setText(time + " Uhr, Bei: " + );
                 }
+                listView.setAdapter(new ArrayAdapter<String>(
+                        Activity_anstehende_termine.this,
+                        android.R.layout.simple_list_item_1,
+                        listViewObjects
+                ));
             }
         });
-
-
-
-        // Listener für Termin 1
-        ValueEventListener valueEventListener = mConditionRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                String text = dataSnapshot.getValue(String.class);
-                mTermin1TextView.setText(text);
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-
-        });
-// Listener für Termin 2
-        ValueEventListener valueEventListener2 = mConditionRef2.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                String text = dataSnapshot.getValue(String.class);
-                mTermin2TextView.setText(text);
-            }
-
-
-
-
-
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-
-        });
-// Listener für Termin 3
-                        ValueEventListener valueEventListener3 = mConditionRef3.addValueEventListener(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                String text = dataSnapshot.getValue(String.class);
-                                mTermin3TextView.setText(text);
-                            }
-
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                            }
-
-                        });
     }
 
     //Methode zur Callback Funktion

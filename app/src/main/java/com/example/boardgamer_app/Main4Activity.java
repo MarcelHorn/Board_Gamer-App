@@ -4,7 +4,9 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
 
+import android.app.AlertDialog;
 import android.app.TimePickerDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -210,6 +212,33 @@ public class Main4Activity extends AppCompatActivity implements TimePickerDialog
 
     public void onClickRefreshGroup(View view) {
 
+        AlertDialog.Builder builder = new AlertDialog.Builder(Main4Activity.this);
+        builder.setCancelable(true);
+        builder.setTitle("Warnung");
+        builder.setMessage("Wirklich die Gruppeneinstellungen aktualisieren? (Daten gehen möglicherweise verloren)");
+        builder.setPositiveButton("Bestätigen",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        RefreshGroup();
+                    }
+                });
+        builder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+            }
+        });
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
+
+
+
+
+    }//Ende des Aktualisierungs-Buttons
+
+
+    private void RefreshGroup() {
         SimpleDateFormat sdfTime = new SimpleDateFormat("HH:mm");
         String time = sdfTime.format(calendar.getTime());
         CalculateInterval();
@@ -367,9 +396,9 @@ public class Main4Activity extends AppCompatActivity implements TimePickerDialog
         lastOrganizerData.put("lastEveningIndex", lastEveningIndex);
         databaseController.UpdateDatabase(DatabaseController.GROUP_COL,DatabaseController.GROUP_SETTINGS_DOC,lastOrganizerData);
 
-    }//Ende des Aktualisierungs-Buttons
+        Toast.makeText(Main4Activity.this, "Erfolgreich aktualisiert", Toast.LENGTH_SHORT).show();
 
-
+    }
     //Methode zur Callback Funktion
     private void ReadUserId(final FirestoreCallback firestoreCallback) {
         userCollection.get()

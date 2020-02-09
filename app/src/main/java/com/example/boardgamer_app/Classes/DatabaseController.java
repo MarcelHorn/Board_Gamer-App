@@ -71,6 +71,26 @@ public class DatabaseController {
                 });
     }
 
+    public void UpdateDatabaseOneField (String collection, String document, String field, Object value) {
+        db.collection(collection)
+                .document(document)
+                .update(field, value)
+                //Wenn erfolgreich
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void xvoid) {
+                        Log.d(DEBUGTAG, "Success!");
+                    }
+                })
+                //Bei Lade-Fehler Exception
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d(DEBUGTAG, "Failure!");
+                    }
+                });
+    }
+
     public void GenerateNewEvening() {
         //TODO: Wenn ein Termin abgehalten wurde, muss 1 neuer Termin erstellt werden
     }
