@@ -9,7 +9,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Activity_login"
+        <activity android:name=".Activity_evening_details"></activity>
+        <activity
+            android:name=".Activity_login"
             android:label="Login">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -17,23 +19,27 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Activity_anstehende_termine"
-                  android:label="Anstehende Termine"/>
+        <activity
+            android:name=".Activity_anstehende_termine"
+            android:label="Anstehende Termine" />
         <activity android:name=".Activity_create_group" />
-        <activity android:name=".Main6Activity"
-                  android:label="Benutzereinstellungen"/>
-        <activity android:name=".Main5Activity"
-                  android:label="Benachrichtigungseinstellungen"/>
-        <activity android:name=".Main4Activity"
-                  android:label="Gruppeneinstellungen"/>
-        <activity android:name=".Main3Activity"
-                  android:label="Einstellungen"/>
+        <activity
+            android:name=".Main6Activity"
+            android:label="Benutzereinstellungen" />
+        <activity
+            android:name=".Main5Activity"
+            android:label="Benachrichtigungseinstellungen" />
+        <activity
+            android:name=".Main4Activity"
+            android:label="Gruppeneinstellungen" />
+        <activity
+            android:name=".Main3Activity"
+            android:label="Einstellungen" />
         <activity android:name=".Main2Activity" />
-        <activity android:name=".MainActivity"/>
-        <activity android:name=".Activity_register"
-                  android:label="Registrieren">
-
-        </activity>
+        <activity android:name=".MainActivity" />
+        <activity
+            android:name=".Activity_register"
+            android:label="Registrieren"></activity>
     </application>
 
 </manifest>
