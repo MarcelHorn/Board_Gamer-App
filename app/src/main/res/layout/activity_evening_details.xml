@@ -6,7 +6,16 @@
     android:layout_height="match_parent"
     tools:context=".Activity_evening_details">
 
+    <Button
+        android:id="@+id/btnCreateGame"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/custom_button"
+        android:text="Spiel vorschlagen"
+        app:layout_constraintBottom_toBottomOf="@+id/linearLayout3" />
+
     <LinearLayout
+        android:id="@+id/linearLayout3"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
@@ -22,5 +31,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="TextView" />
+
+        <ListView
+            android:id="@+id/listViewGames"
+            android:layout_width="match_parent"
+            android:layout_height="637dp" />
+
     </LinearLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

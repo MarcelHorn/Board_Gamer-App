@@ -3,36 +3,23 @@ package com.example.boardgamer_app;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.ListActivity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Debug;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.boardgamer_app.Classes.DatabaseController;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.Timestamp;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
-import java.sql.Time;
 import java.text.SimpleDateFormat;
-import java.time.Instant;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,6 +30,7 @@ public class Activity_anstehende_termine extends AppCompatActivity {
         void onCallback(List<Timestamp> eveningTimestampList, List<Integer> eveningOrganizerList);
     }
 
+    private static final String TAG = "Activity_anstehende_ter";
     private ListView listView;
     private ArrayList<String> listViewObjects;
     private ArrayAdapter<String> eveningAdapter;
@@ -104,6 +92,7 @@ public class Activity_anstehende_termine extends AppCompatActivity {
                 long longTime = timestampList.get(position).getSeconds()*1000;
                 intent.putExtra("Timestamp", longTime);
                 intent.putExtra("Organizer", eveningOrganizerList.get(position));
+                intent.putExtra("Id", position+1);
                 startActivity(intent);
             }
         });
@@ -122,6 +111,7 @@ public class Activity_anstehende_termine extends AppCompatActivity {
                                 timestampList.add(ts);
                                 int i = snapshots.getLong("Organizer").intValue();
                                 eveningOrganizerList.add(i);
+                                int id = snapshots.getLong("id").intValue();
                             }
                             firestoreCallback.onCallback(timestampList, eveningOrganizerList );
                         }
