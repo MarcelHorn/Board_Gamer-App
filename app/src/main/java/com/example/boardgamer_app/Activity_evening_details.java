@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import com.example.boardgamer_app.Classes.DatabaseController;
 import com.example.boardgamer_app.Classes.DialogGames;
+import com.example.boardgamer_app.Classes.Game;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -41,7 +42,8 @@ public class Activity_evening_details extends AppCompatActivity implements Dialo
     Button mGameCreate;
     ListView mListView;
     String game;
-    public List<String> listViewObjects;
+    int likes;
+    public List<Game> listViewObjects;
 
 
     @Override
@@ -54,27 +56,32 @@ public class Activity_evening_details extends AppCompatActivity implements Dialo
         mGameCreate = findViewById(R.id.btnCreateGame);
         mListView = findViewById(R.id.listViewGames);
 
-        listViewObjects = new ArrayList<String>();
-
-
-
+        listViewObjects = new ArrayList<Game>();
 
         Long longTime = getIntent().getLongExtra("Timestamp", 0);
         organizerId = getIntent().getIntExtra("Organizer", 0);
         eveningId = getIntent().getIntExtra("Id", 0);
 
         databaseController.db
-                .collection(DatabaseController.EVENING_COL)
+                .collection("Spielevorschläge")
                 .document("Termin"+eveningId)
                 .get()
                 .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @NonNull
                     @Override
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
                         if (documentSnapshot.exists()) {
 
                                 for (int i = 1; i != 10; i++) {
-                                    game = documentSnapshot.getString("Game" + i);
-                                    if (game != null) listViewObjects.add(game);
+                                    String gameName = documentSnapshot.getString("Game" + i);
+                                    String likes = documentSnapshot.getString("Game"+i+"Likes");
+
+                                    if (gameName != null && likes != null) {
+                                        Game newGame = new Game();
+                                        newGame.setName(gameName);
+                                        newGame.setLikes(Integer.parseInt(likes.trim()));
+                                        listViewObjects.add(newGame);
+                                    }
                                 }
                             LoadGames();
                         }
@@ -106,13 +113,14 @@ public class Activity_evening_details extends AppCompatActivity implements Dialo
         super.onStop();
         Map<String, Object> data = new HashMap<>();
         for (int i = 0; i < listViewObjects.size(); i++) {
-            data.put("Game"+ (i+1), listViewObjects.get(i));
+            data.put("Game"+ (i+1), listViewObjects.get(i).getName());
+            data.put("Game"+ (i+1)+"Likes", String.valueOf(listViewObjects.get(i).getLikes()));
         }
-        databaseController.UpdateDatabase(DatabaseController.EVENING_COL,"Termin"+ eveningId , data);
+        databaseController.writeInDatabase("Spielevorschläge","Termin"+ eveningId , data);
     }
 
     public void LoadGames() {
-        mListView.setAdapter(new ArrayAdapter<String>(
+        mListView.setAdapter(new ArrayAdapter<Game>(
                 Activity_evening_details.this,
                 android.R.layout.simple_list_item_1,
                 listViewObjects
@@ -122,7 +130,10 @@ public class Activity_evening_details extends AppCompatActivity implements Dialo
     @Override
     public void sendInput(String input) {
         Log.d(TAG, "sendInput: got the Input");
-        listViewObjects.add(input);
+        Game newGame = new Game();
+        newGame.setName(input);
+        newGame.setLikes(0);
+        listViewObjects.add(newGame);
         LoadGames();
 
     }
