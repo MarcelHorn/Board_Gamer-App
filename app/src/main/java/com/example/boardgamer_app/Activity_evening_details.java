@@ -43,11 +43,11 @@ public class Activity_evening_details extends AppCompatActivity implements Dialo
     private static final String TAG = "Activity_evening_detail";
 
     DatabaseController databaseController = new DatabaseController();
-    Integer organizerId, eveningId;
+    Integer eveningId;
     TextView txtOrganizer, txtTime;
     Button mGameCreate;
     ListView mListView;
-    String game;
+    String game, organizerName;
     int likes, userId;
 
     boolean userLikedGame[] = new boolean[10];
@@ -67,7 +67,7 @@ public class Activity_evening_details extends AppCompatActivity implements Dialo
         listViewObjects = new ArrayList<Game>();
 
         Long longTime = getIntent().getLongExtra("Timestamp", 0);
-        organizerId = getIntent().getIntExtra("Organizer", 0);
+        organizerName = getIntent().getStringExtra("Organizer");
         eveningId = getIntent().getIntExtra("Id", 0);
 
         databaseController.db
@@ -117,7 +117,7 @@ public class Activity_evening_details extends AppCompatActivity implements Dialo
         String time = sdfTime.format(date);
 
         txtTime.setText("Termin: " + time);
-        txtOrganizer.setText("Veranstallter: " + organizerId.toString());
+        txtOrganizer.setText("Veranstallter: " + organizerName);
 
         mGameCreate.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -156,7 +156,7 @@ public class Activity_evening_details extends AppCompatActivity implements Dialo
             data.put("Game"+ (i+1)+"Likes", String.valueOf(listViewObjects.get(i).getLikes()));
             data.put("Game"+ (i+1)+"User" + userId, listViewObjects.get(i).isUserId());
         }
-        databaseController.writeInDatabase("Spielevorschläge","Termin"+ eveningId , data);
+        databaseController.UpdateDatabase("Spielevorschläge","Termin"+ eveningId , data);
     }
 
     public void LoadGames() {
