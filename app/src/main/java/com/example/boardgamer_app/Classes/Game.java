@@ -3,6 +3,16 @@ package com.example.boardgamer_app.Classes;
 public class Game {
     private String name;
 
+    public boolean isUserId() {
+        return UserId;
+    }
+
+    public void setUserId(boolean userId) {
+        UserId = userId;
+    }
+
+    private boolean UserId;
+
     public String getName() {
         return name;
     }
