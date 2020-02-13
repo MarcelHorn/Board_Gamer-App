@@ -34,17 +34,14 @@ public class Activity_anstehende_termine extends AppCompatActivity {
     }
 
     private static final String TAG = "Activity_anstehende_ter";
+
     private ListView listView;
     private ArrayList<String> listViewObjects;
-    private ArrayAdapter<String> eveningAdapter;
-    CollectionReference eveningCollection;
+    private CollectionReference eveningCollection;
     private Map<Integer, String> userData;
 
     ArrayList<Timestamp> timestampList = new ArrayList();
     ArrayList<Integer> eveningOrganizerList = new ArrayList();
-
-
-    //Nachfolgend alles DB-Anbindung
 
     DatabaseController databaseController = new DatabaseController();
 

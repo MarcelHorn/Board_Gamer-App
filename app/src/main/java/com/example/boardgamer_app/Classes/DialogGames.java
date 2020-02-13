@@ -27,6 +27,7 @@ import androidx.fragment.app.DialogFragment;
 
 public class DialogGames extends DialogFragment {
 
+    //Interface, welches von Activity_anstehende_termine verwendet werden muss
     public interface OnInputListener{
         void sendInput(String input);
     }
@@ -48,6 +49,8 @@ public class DialogGames extends DialogFragment {
         mActionCancel = view.findViewById(R.id.textDialogCancel);
         mActionOk = view.findViewById(R.id.textDialogOk);
         mInput = view.findViewById(R.id.spinnerGames);
+
+        //Statisches füllen der Spieleliste für den Spinner
         gamesList = new ArrayList<String>();
         gamesList.add("Monopoly");
         gamesList.add("Uno");
@@ -61,7 +64,7 @@ public class DialogGames extends DialogFragment {
         gamesList.add("Scotland Yard");
 
 
-
+        //Methode zum füllen des Spinners mit der ArrayList
         SpinnerConfig();
 
         mActionCancel.setOnClickListener(new View.OnClickListener() {
@@ -79,7 +82,7 @@ public class DialogGames extends DialogFragment {
                 Log.d(TAG, "onClick: OK");
                 String input = mInput.getSelectedItem().toString();
                 Log.d(TAG, input);
-                //((Activity_evening_details)getActivity()).listViewObjects.add(input);
+                //sendet den input (der Spielname) an die Activity_anstehende_termine(bekannt durch die Attach-Methode und dem Interface OnInputListener)
                 mOnInputListener.sendInput(input);
                 getDialog().dismiss();
             }

@@ -7,6 +7,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.SetOptions;
 
 import java.util.Map;
 
@@ -33,7 +34,7 @@ public class DatabaseController {
     public void writeInDatabase (String collection, String document, Map<String, Object> field) {
         db.collection(collection)
                 .document(document)
-                .set(field)
+                .set(field, SetOptions.merge())
                 //Wenn erfolgreich
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override

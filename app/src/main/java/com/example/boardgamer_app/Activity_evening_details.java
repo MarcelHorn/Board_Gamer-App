@@ -25,7 +25,9 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.Timestamp;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.model.Document;
 
 
 import java.lang.reflect.Array;
@@ -70,54 +72,66 @@ public class Activity_evening_details extends AppCompatActivity implements Dialo
         organizerName = getIntent().getStringExtra("Organizer");
         eveningId = getIntent().getIntExtra("Id", 0);
 
+        //Laden der User Id aus der Datenbank
         databaseController.db
                 .collection(DatabaseController.USER_COL)
                 .document(databaseController.mFirebaseAuth.getCurrentUser().getEmail())
                 .get()
-                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>()
+                {
                     @Override
-                    public void onSuccess(@NonNull DocumentSnapshot documentSnapshot) {
+                    public void onSuccess(@NonNull DocumentSnapshot documentSnapshot)
+                    {
                         userId = documentSnapshot.getLong("id").intValue();
 
+                        //Laden der Spielevorschläge, NACHDEM die User Id geladen wurde
                         databaseController.db
                                 .collection("Spielevorschläge")
                                 .document("Termin"+eveningId)
                                 .get()
-                                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>()
+                                {
                                     @NonNull
                                     @Override
-                                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                    public void onSuccess(DocumentSnapshot documentSnapshot)
+                                    {
                                         if (documentSnapshot.exists()) {
 
-                                            for (int i = 1; i != 10; i++) {
+                                            for (int i = 1; i != 10; i++)
+                                            {
                                                 String gameName = documentSnapshot.getString("Game" + i);
                                                 String likes = documentSnapshot.getString("Game"+i+"Likes");
                                                 Boolean userHasLiked = documentSnapshot.getBoolean("Game" + i + "User" + userId);
+
                                                 if (userHasLiked == null && gameName != null) userHasLiked = false;
-                                                if (gameName != null && likes != null) {
+                                                if (gameName != null && likes != null)
+                                                {
+                                                    //Neues Objekt von Typ Game erstellen und die geladenen Daten setzen
                                                     Game newGame = new Game();
                                                     newGame.setName(gameName);
                                                     newGame.setLikes(Integer.parseInt(likes.trim()));
+                                                    //das Objekt besitzt nur den Boolean des aktuellen Users, ob er geliket hat oder nicht
                                                     newGame.setUserId(userHasLiked);
+                                                    //hinzufügen zu den anzuzeigenen Objekten in der ViewList
                                                     listViewObjects.add(newGame);
                                                 }
                                             }
+                                            //Methode, die die Liste erstellt und ggf. einfärbt bei gelikten Spielen
                                             LoadGames();
                                         }
-
                                     }
                                 });
                     }
                 });
 
-
-
+        //setzten des Datums und des Veranstallters
         Date date = new Date(longTime);
         SimpleDateFormat sdfTime = new SimpleDateFormat("EEE dd.MM.yyyy - HH:mm");
         String time = sdfTime.format(date);
 
         txtTime.setText("Termin: " + time);
         txtOrganizer.setText("Veranstallter: " + organizerName);
+
 
         mGameCreate.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -127,6 +141,7 @@ public class Activity_evening_details extends AppCompatActivity implements Dialo
             }
         });
 
+        //OnItemClickListener für die Spiele, beim Klick wird entweder markiert oder zurückgenommen, die Likes werden um 1 erhöht/gesenkt
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -141,12 +156,9 @@ public class Activity_evening_details extends AppCompatActivity implements Dialo
                 LoadGames();
             }
         });
-
-
-
-
     }
 
+    //Methode wird beim Verlassen der Activity aufgerufen (Sichern der Daten und schreiben in DB)
     @Override
     protected void onStop() {
         super.onStop();
@@ -156,7 +168,9 @@ public class Activity_evening_details extends AppCompatActivity implements Dialo
             data.put("Game"+ (i+1)+"Likes", String.valueOf(listViewObjects.get(i).getLikes()));
             data.put("Game"+ (i+1)+"User" + userId, listViewObjects.get(i).isUserId());
         }
-        databaseController.UpdateDatabase("Spielevorschläge","Termin"+ eveningId , data);
+
+        databaseController.writeInDatabase("Spielevorschläge", "Termin" + eveningId, data);
+
     }
 
     public void LoadGames() {
@@ -164,22 +178,23 @@ public class Activity_evening_details extends AppCompatActivity implements Dialo
                 Activity_evening_details.this,
                 android.R.layout.simple_list_item_1,
                 listViewObjects) {
+            //Überladen der getView Methode vom ArrayAdapter, zum Farbe ändern
             @Override
             public View getView(int position, View convertView, ViewGroup parent) {
                 View row = super.getView(position, convertView, parent);
 
                 if (listViewObjects.get(position).isUserId()) {
-                    // do something change color
-                    row.setBackgroundColor(Color.LTGRAY); // some color
+                    row.setBackgroundColor(Color.LTGRAY);
                 } else {
-                    // default state
-                    row.setBackgroundColor(Color.WHITE); // default coloe
+                    row.setBackgroundColor(Color.WHITE);
                 }
                 return row;
             }
         });
     }
 
+    //Interface Methode erhählt den namen des Spiels aus der Dialog Box und
+    //erstellt damit ein neues Game-Objekt mit 0 likes und aktualisiert die List View
     @Override
     public void sendInput(String input) {
         Log.d(TAG, "sendInput: got the Input");
@@ -188,6 +203,5 @@ public class Activity_evening_details extends AppCompatActivity implements Dialo
         newGame.setLikes(0);
         listViewObjects.add(newGame);
         LoadGames();
-
     }
 }
