@@ -6,22 +6,20 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
+
 import android.widget.EditText;
-import android.widget.Spinner;
+
 import android.widget.TextView;
 
 import com.example.boardgamer_app.R;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
 public class DialogMessages extends DialogFragment {
-    //Interface, welches von Activity_anstehende_termine verwendet werden muss
+
+    //Interface, welches von Main2Activity verwendet werden muss
     public interface OnInputListener{
         void sendInput(String input);
     }

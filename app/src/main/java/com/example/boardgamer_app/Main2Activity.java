@@ -69,6 +69,7 @@ public class Main2Activity extends AppCompatActivity implements DialogMessages.O
             }
         });
 
+        //Holt alle Nachrichten aus der DB und packt sie in die Liste "listViewObjects"
         databaseController.db
                 .collection("Nachrichten")
                 .get()
@@ -86,6 +87,7 @@ public class Main2Activity extends AppCompatActivity implements DialogMessages.O
                     }
                 });
 
+        //Die Lösch Funktion beim langen drücken auf Nachricht
         listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
@@ -129,17 +131,13 @@ public class Main2Activity extends AppCompatActivity implements DialogMessages.O
 
                 AlertDialog dialog = builder.create();
                 dialog.show();
-
-
-
-                Log.v("long clicked","pos: " + pos);
-
                 return true;
             }
         });
     }
 
 
+    //Interface-Methode, analog wie die Spielevorschläge
     @Override
     public void sendInput(String input) {
         Log.d(TAG, "sendInput: got the Input");
@@ -152,7 +150,6 @@ public class Main2Activity extends AppCompatActivity implements DialogMessages.O
         Map<String, Object> data = new HashMap<>();
         data.put("Message", newMessage);
         databaseController.writeInDatabase("Nachrichten", (userName + time), data);
-        //newGame.setName(input);
 
 
     }
