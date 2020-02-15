@@ -25,9 +25,7 @@
     <string name="btn_dates">Aktuelle Termine (unnötig?)</string>
     <string name="btn_messages">Nachrichten</string>
     <string name="btn_settings">Einstellungen</string>
-    <string name="btn_date_request">Terminanfragen</string>
-    <string name="btn_received_messages">Erhaltene Nachrichten</string>
-    <string name="btn_pending_rating">Ausstehende Bewertungen</string>
+
     <string name="btn_groups">Gruppen</string>
     <string name="btn_settings_messages">Benachrichtigungen</string>
     <string name="btn_settings_profile">Profil</string>

@@ -92,6 +92,7 @@ public class DatabaseController {
                 });
     }
 
+
     public void GenerateNewEvening() {
         //TODO: Wenn ein Termin abgehalten wurde, muss 1 neuer Termin erstellt werden
     }

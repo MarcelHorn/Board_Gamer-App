@@ -29,12 +29,16 @@ public class MainActivity extends AppCompatActivity {
     //Keys
     public static final String KEY_NAME = "name";
 
+    private int userId;
+    private String userName;
+
     //optional: ist der TAG der Exception, um mögliche Fehler zu lokalisieren
 
     private static final String TAG = "mainActivity";
 
     //Gesamte Datenbank Instanz
     FirebaseFirestore db = FirebaseFirestore.getInstance();
+    DatabaseController databaseController = new DatabaseController();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,31 +46,23 @@ public class MainActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_main);
 
-
-
-    }
-
-
-    public void onClickTest (View v) {
-        DatabaseController data = new DatabaseController();
-
-        data.db.collection(DatabaseController.USER_COL)
-                .document(data.mFirebaseAuth.getCurrentUser().getEmail())
+        //Laden der User Id aus der Datenbank
+        databaseController.db
+                .collection(DatabaseController.USER_COL)
+                .document(databaseController.mFirebaseAuth.getCurrentUser().getEmail())
                 .get()
                 .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                     @Override
-                    public void onSuccess(DocumentSnapshot documentSnapshot) {
-                        if (documentSnapshot.exists()) {
-                            String id = documentSnapshot.getString("id");
-                            Toast.makeText(MainActivity.this, id, Toast.LENGTH_LONG).show();
-                        }
+                    public void onSuccess(@NonNull DocumentSnapshot documentSnapshot) {
+                        userId = documentSnapshot.getLong("id").intValue();
+                        userName = documentSnapshot.getString("name");
                     }
                 });
     }
 
-
     public void onClickNachrichten (View Button) {
         Intent changeIntent = new Intent (MainActivity.this, Main2Activity.class);
+        changeIntent.putExtra("UserName", userName);
         startActivity(changeIntent);
            }
 
