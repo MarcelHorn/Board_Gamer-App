@@ -46,6 +46,15 @@
             android:text="@string/btn_messages" />
 
         <Button
+            android:id="@+id/button5"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/custom_button"
+            android:onClick="onClickVergangeneTermine"
+            android:text="@string/vergangene_termine" />
+
+        <Button
             android:id="@+id/button4"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

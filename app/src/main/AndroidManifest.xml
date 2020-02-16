@@ -9,7 +9,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Activity_evening_details"></activity>
+        <activity android:name=".Activity_past_evening_details"
+                  android:label="Vergangener Termin"></activity>
+        <activity android:name=".Activity_vergangene_termine"
+                  android:label="Vergangene Termine"/>
+        <activity android:name=".Activity_evening_details"
+                  android:label="Termin"/>
         <activity
             android:name=".Activity_login"
             android:label="Login">
@@ -39,7 +44,7 @@
         <activity android:name=".MainActivity" />
         <activity
             android:name=".Activity_register"
-            android:label="Registrieren"></activity>
+            android:label="Registrieren" />
     </application>
 
 </manifest>

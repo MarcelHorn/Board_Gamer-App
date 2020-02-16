@@ -20,6 +20,10 @@ public class DatabaseController {
     public final static String USER_COL = "User";
     public final static String EVENING_COL = "Termine";
     public final static String GROUP_COL = "Gruppe";
+    public final static String PAST_EVENING_COL = "Vergangene Termine";
+    public final static String MESSAGE_COL = "Nachrichten";
+    public final static String GAMES_COL = "Spielevorschläge";
+
     public final static String GROUP_SETTINGS_DOC = "Gruppeneinstellungen";
 
     public FirebaseAuth mFirebaseAuth;

@@ -46,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_main);
 
+
         //Laden der User Id aus der Datenbank
         databaseController.db
                 .collection(DatabaseController.USER_COL)
@@ -71,8 +72,8 @@ public class MainActivity extends AppCompatActivity {
         startActivity(changeIntent);
     }
 
-    public void onClickGruppenErstellung (View Button) {
-        Intent changeIntent = new Intent (MainActivity.this, Activity_create_group.class);
+    public void onClickVergangeneTermine (View Button) {
+        Intent changeIntent = new Intent (MainActivity.this, Activity_vergangene_termine.class);
         startActivity(changeIntent);
     }
 

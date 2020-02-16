@@ -73,6 +73,7 @@
     <string name="w_hle_ein_spiel_aus">Wähle ein Spiel aus</string>
     <string name="abbrechen">Abbrechen</string>
     <string name="vorschlagen">Vorschlagen</string>
+    <string name="vergangene_termine">Vergangene Termine</string>
 
 
 </resources>
