@@ -61,6 +61,12 @@ public class MainActivity extends AppCompatActivity {
                 });
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        databaseController.CheckEvenings();
+    }
+
     public void onClickTest (View Button) {
         databaseController.GenerateNewEvening();
     }

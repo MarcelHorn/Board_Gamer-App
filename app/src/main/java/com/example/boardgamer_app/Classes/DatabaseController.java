@@ -1,6 +1,7 @@
 package com.example.boardgamer_app.Classes;
 
 
+import android.provider.ContactsContract;
 import android.util.Log;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -16,8 +17,10 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.SetOptions;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import androidx.annotation.NonNull;
@@ -42,8 +45,10 @@ public class DatabaseController {
     Timestamp ts;
     int eveningId, intervalIndex, interval, eveningNameId, organizerId, memberCount;
 
-    CollectionReference usersCol, groupsCol, eveningsCol;
+    CollectionReference usersCol, groupsCol, eveningsCol, pastEveningsCol;
     DocumentReference groupSettingsDoc;
+
+    List<DocumentSnapshot> documentSnapshotList;
 
     public DatabaseController() {
         mFirebaseAuth = FirebaseAuth.getInstance();
@@ -52,11 +57,14 @@ public class DatabaseController {
         usersCol = db.collection(DatabaseController.USER_COL);
         groupsCol = db.collection(DatabaseController.GROUP_COL);
         eveningsCol = db.collection(DatabaseController.EVENING_COL);
+        pastEveningsCol = db.collection(DatabaseController.PAST_EVENING_COL);
 
         groupSettingsDoc = db.collection(DatabaseController.GROUP_COL)
                              .document(DatabaseController.GROUP_SETTINGS_DOC);
 
         eveningId = 0;
+
+        documentSnapshotList = new ArrayList<>();
     }
 
     //überschreibt alle Felder des Dokuments mit der neuen Map (nicht erwähnte werden gelöscht)
@@ -123,26 +131,31 @@ public class DatabaseController {
 
 
     public void GenerateNewEvening() {
-        //TODO: Wenn ein Termin abgehalten wurde, muss 1 neuer Termin erstellt werden
         //1. Suche ältester Termin: speichere timestamp und id
         //2. Addiere intervall drauf
         //3. Erstelle neuen Termin
 
         eveningsCol.get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>()
+                {
                     @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                            if (task.isSuccessful()) {
+                    public void onComplete(@NonNull Task<QuerySnapshot> task)
+                    {
+                            if (task.isSuccessful())
+                            {
                                 ts = new Timestamp(0,0);
-
-                                for (DocumentSnapshot snapshots : task.getResult()) {
-                                    if (snapshots.getTimestamp("Datum").getSeconds() > ts.getSeconds()) {
+                                for (DocumentSnapshot snapshots : task.getResult())
+                                {
+                                    if (snapshots.getTimestamp("Datum").getSeconds() > ts.getSeconds())
+                                    {
                                         ts = snapshots.getTimestamp("Datum");
                                         eveningId = snapshots.getLong("id").intValue();
-                                        eveningNameId = Integer.parseInt(snapshots.getReference().getId().substring(6));
                                         organizerId = snapshots.getLong("Organizer").intValue();
-                                    }
 
+                                        //Die Id des TerminDokuments, also bei z.B. Termin5 = 5
+                                        eveningNameId = Integer.parseInt(snapshots.getReference().getId().substring(6));
+
+                                    }
                                 }
 
                                 Log.d(TAG, "timestamp= " + ts.toDate().toString());
@@ -150,10 +163,13 @@ public class DatabaseController {
                                 Log.d(TAG, "eveningNameId= " + eveningNameId);
 
                                 groupSettingsDoc.get()
-                                        .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                        .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>()
+                                        {
                                             @Override
-                                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                                    if (task.isSuccessful()) {
+                                            public void onComplete(@NonNull Task<DocumentSnapshot> task)
+                                            {
+                                                    if (task.isSuccessful())
+                                                    {
                                                         intervalIndex = task.getResult().getLong("RhythmusIndex").intValue();
                                                         memberCount = task.getResult().getLong("AnzahlMitgliederIndex").intValue();
                                                         Log.d(TAG, "intervallIndex= " + intervalIndex);
@@ -165,7 +181,8 @@ public class DatabaseController {
                                                         eveningNameId++;
                                                         eveningId++;
 
-                                                        if (organizerId > memberCount) {
+                                                        if (organizerId > memberCount)
+                                                        {
                                                             organizerId = 1;
                                                         }
                                                         //
@@ -194,7 +211,8 @@ public class DatabaseController {
 
     }
 
-    private void GetInterval() {
+    private void GetInterval()
+    {
         switch (intervalIndex)
         {
             case 0:
@@ -216,7 +234,55 @@ public class DatabaseController {
         }
     }
 
-    public void SetEveningAsCompleted() {
-        //TODO: Verschiebe abgehaltenen Termin von Anstehende Termine zu vergangende Termine
+    public void CheckEvenings()
+    {
+        //1. Lade alle aktuellen Termine (für Timestamp, Organizer und id)
+        //2. Prüfe die timestamps mit dem aktuellen Zeitpunkt
+        //3. Liegt mindestens 1 Termin in Vergangenheit lade alle vergangenen Termine (für id)
+        //4. Abspeichern in vergangene Termine mit neuer id
+        //5. Löschen in aktuelle Termine
+
+        eveningsCol.get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            documentSnapshotList.clear();
+                            for (DocumentSnapshot snapshot : task.getResult()) {
+                                if (snapshot.getTimestamp("Datum").getSeconds() < Timestamp.now().getSeconds()) {
+                                    documentSnapshotList.add(snapshot);
+                                }
+                            }
+                            Log.d(TAG, "snapshotlist= " + documentSnapshotList.toString());
+                            pastEveningsCol.get()
+                                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                                int newId = 0;
+                                                if (task.isSuccessful() && task.getResult() != null) {
+                                                    for (DocumentSnapshot snapshot : task.getResult()) {
+                                                        if (snapshot.getLong("id").intValue() > newId ) {
+                                                            newId = snapshot.getLong("id").intValue();
+                                                        }
+                                                    }
+                                                }
+
+                                                newId++;
+                                                for (DocumentSnapshot snapshot2 : documentSnapshotList) {
+                                                    Map<String, Object> data = new HashMap<>();
+                                                    data.put("Datum", snapshot2.getTimestamp("Datum"));
+                                                    data.put("Organizer", snapshot2.getLong("Organizer").intValue());
+                                                    data.put("id", newId);
+
+                                                    Log.d(TAG, "Map= " +data.toString());
+                                                    writeInDatabase(DatabaseController.PAST_EVENING_COL, "Termin" + newId, data);
+                                                    snapshot2.getReference().delete();
+                                                }
+                                        }
+                                    });
+
+                        }
+                    }
+                });
     }
 }
