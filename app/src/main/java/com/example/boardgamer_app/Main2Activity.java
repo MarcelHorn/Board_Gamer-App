@@ -5,7 +5,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -16,14 +15,10 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.example.boardgamer_app.Classes.DatabaseController;
-import com.example.boardgamer_app.Classes.DialogGames;
 import com.example.boardgamer_app.Classes.DialogMessages;
-import com.example.boardgamer_app.Classes.Game;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.text.SimpleDateFormat;
@@ -40,7 +35,7 @@ public class Main2Activity extends AppCompatActivity implements DialogMessages.O
 
     String userName;
     Button buttonCreate;
-    SimpleDateFormat sdf, sdfDetail;
+    SimpleDateFormat sdfShort, sdfDetail;
     ListView listView;
     List<String> listViewObjects ;
     int deletePos;
@@ -57,7 +52,7 @@ public class Main2Activity extends AppCompatActivity implements DialogMessages.O
         buttonCreate = findViewById(R.id.btnCreateMessage);
         listView = findViewById(R.id.listViewMessages);
         listViewObjects = new ArrayList<>();
-        sdf = new SimpleDateFormat("EEE dd.MM - HH:mm");
+        sdfShort = new SimpleDateFormat("dd.MM-HH:mm");
         sdfDetail = new SimpleDateFormat("EEE dd.MM - HH:mm:ss");
 
         buttonCreate.setOnClickListener(new View.OnClickListener()
@@ -117,6 +112,7 @@ public class Main2Activity extends AppCompatActivity implements DialogMessages.O
                                                             LoadMessages();
                                                         }
                                                     }
+                                                    LoadMessages();
                                                 }
                                             }
                                         });
@@ -144,12 +140,13 @@ public class Main2Activity extends AppCompatActivity implements DialogMessages.O
         Toast.makeText(Main2Activity.this,input,Toast.LENGTH_SHORT).show();
         Date date = new Date();
         String time = sdfDetail.format(date);
+        String timeShort = sdfShort.format(date);
         String newMessage = time + " - " + userName + ": " + input;
         listViewObjects.add (newMessage);
         LoadMessages();
         Map<String, Object> data = new HashMap<>();
         data.put("Message", newMessage);
-        databaseController.writeInDatabase("Nachrichten", (userName + time), data);
+        databaseController.writeInDatabase("Nachrichten", (timeShort + userName), data);
 
 
     }

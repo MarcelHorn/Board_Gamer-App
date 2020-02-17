@@ -62,6 +62,13 @@
             android:onClick="onClickEinstellungen"
             android:text="@string/btn_settings" />
 
+        <Button
+            android:id="@+id/btnTest"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="onClickTest"
+            android:text="test" />
+
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

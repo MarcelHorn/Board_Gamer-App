@@ -61,6 +61,10 @@ public class MainActivity extends AppCompatActivity {
                 });
     }
 
+    public void onClickTest (View Button) {
+        databaseController.GenerateNewEvening();
+    }
+
     public void onClickNachrichten (View Button) {
         Intent changeIntent = new Intent (MainActivity.this, Main2Activity.class);
         changeIntent.putExtra("UserName", userName);
