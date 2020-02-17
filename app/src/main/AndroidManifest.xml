@@ -17,7 +17,7 @@
                   android:label="Termin"/>
         <activity
             android:name=".Activity_login"
-            android:label="Login">
+            android:label="OnBoard">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -40,7 +40,8 @@
         <activity
             android:name=".Main3Activity"
             android:label="Einstellungen" />
-        <activity android:name=".Main2Activity" />
+        <activity android:name=".Main2Activity"
+            android:label="Nachrichten"/>
         <activity android:name=".MainActivity" />
         <activity
             android:name=".Activity_register"
