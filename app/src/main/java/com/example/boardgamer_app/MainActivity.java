@@ -6,21 +6,12 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.content.Intent;
-import android.util.Log;
 import android.view.View;
-import android.widget.Button;
-import android.widget.Toast;
 
 import com.example.boardgamer_app.Classes.DatabaseController;
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-
-import java.util.HashMap;
-import java.util.Map;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -72,23 +63,23 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onClickNachrichten (View Button) {
-        Intent changeIntent = new Intent (MainActivity.this, Main2Activity.class);
+        Intent changeIntent = new Intent (MainActivity.this, Activity_messages.class);
         changeIntent.putExtra("UserName", userName);
         startActivity(changeIntent);
            }
 
     public void onClickEinstellungen (View Button) {
-        Intent changeIntent = new Intent (MainActivity.this, Main3Activity.class);
+        Intent changeIntent = new Intent (MainActivity.this, Activity_settings.class);
         startActivity(changeIntent);
     }
 
     public void onClickVergangeneTermine (View Button) {
-        Intent changeIntent = new Intent (MainActivity.this, Activity_vergangene_termine.class);
+        Intent changeIntent = new Intent (MainActivity.this, Activity_past_evenings.class);
         startActivity(changeIntent);
     }
 
     public void onClickAnstehendeTermine (View Button) {
-        Intent changeIntent = new Intent (MainActivity.this, Activity_anstehende_termine.class);
+        Intent changeIntent = new Intent (MainActivity.this, Activity_evenings.class);
         startActivity(changeIntent);
     }
 

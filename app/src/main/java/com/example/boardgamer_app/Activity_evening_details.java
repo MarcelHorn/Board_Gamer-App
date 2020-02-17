@@ -130,7 +130,7 @@ public class Activity_evening_details extends AppCompatActivity implements Dialo
         String time = sdfTime.format(date);
 
         txtTime.setText("Termin: " + time);
-        txtOrganizer.setText("Veranstallter: " + organizerName);
+        txtOrganizer.setText("Veranstalter: " + organizerName);
 
 
         mGameCreate.setOnClickListener(new View.OnClickListener() {

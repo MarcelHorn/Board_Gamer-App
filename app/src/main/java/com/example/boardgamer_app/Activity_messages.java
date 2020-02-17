@@ -28,7 +28,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class Main2Activity extends AppCompatActivity implements DialogMessages.OnInputListener {
+public class Activity_messages extends AppCompatActivity implements DialogMessages.OnInputListener {
 
 
     private static final String TAG = "Main2Activity";
@@ -52,7 +52,7 @@ public class Main2Activity extends AppCompatActivity implements DialogMessages.O
         buttonCreate = findViewById(R.id.btnCreateMessage);
         listView = findViewById(R.id.listViewMessages);
         listViewObjects = new ArrayList<>();
-        sdfShort = new SimpleDateFormat("dd.MM-HH:mm");
+        sdfShort = new SimpleDateFormat("dd.MM-HH:mm:ss");
         sdfDetail = new SimpleDateFormat("EEE dd.MM - HH:mm:ss");
 
         buttonCreate.setOnClickListener(new View.OnClickListener()
@@ -88,7 +88,7 @@ public class Main2Activity extends AppCompatActivity implements DialogMessages.O
             public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
                                            int pos, long id) {
                 deletePos = pos;
-                AlertDialog.Builder builder = new AlertDialog.Builder(Main2Activity.this);
+                AlertDialog.Builder builder = new AlertDialog.Builder(Activity_messages.this);
                 builder.setCancelable(true);
                 builder.setTitle("Warnung");
                 builder.setMessage("Wirklich diese Nachricht löschen?");
@@ -137,7 +137,7 @@ public class Main2Activity extends AppCompatActivity implements DialogMessages.O
     @Override
     public void sendInput(String input) {
         Log.d(TAG, "sendInput: got the Input");
-        Toast.makeText(Main2Activity.this,input,Toast.LENGTH_SHORT).show();
+        Toast.makeText(Activity_messages.this,input,Toast.LENGTH_SHORT).show();
         Date date = new Date();
         String time = sdfDetail.format(date);
         String timeShort = sdfShort.format(date);
@@ -153,7 +153,7 @@ public class Main2Activity extends AppCompatActivity implements DialogMessages.O
 
     private void LoadMessages() {
         listView.setAdapter(new ArrayAdapter<String>(
-                Main2Activity.this,
+                Activity_messages.this,
                 android.R.layout.simple_list_item_1,
                 listViewObjects)
         );

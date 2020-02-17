@@ -1,23 +1,18 @@
 package com.example.boardgamer_app.Classes;
 
 import android.content.Context;
-import android.nfc.Tag;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.example.boardgamer_app.Activity_evening_details;
-import com.example.boardgamer_app.Main4Activity;
 import com.example.boardgamer_app.R;
 
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 

@@ -13,7 +13,6 @@ import android.widget.ListView;
 
 import com.example.boardgamer_app.Classes.DatabaseController;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.CollectionReference;
@@ -26,34 +25,33 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class Activity_anstehende_termine extends AppCompatActivity {
+public class Activity_past_evenings extends AppCompatActivity {
 
     //Interface Callback Funktion
     private interface FirestoreCallback {
         void onCallback(List<Timestamp> eveningTimestampList, List<Integer> eveningOrganizerList);
     }
 
-    private static final String TAG = "Activity_anstehende_ter";
+    private static final String TAG = "Activity_vergangene_ter";
 
     private ListView listView;
     private ArrayList<String> listViewObjects;
-    private CollectionReference eveningCollection;
+    private CollectionReference pastEveningCollection;
     private Map<Integer, String> userData;
 
     ArrayList<Timestamp> timestampList = new ArrayList();
     ArrayList<Integer> eveningOrganizerList = new ArrayList();
 
     DatabaseController databaseController = new DatabaseController();
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_anstehende_termine);
+        setContentView(R.layout.activity_vergangene_termine);
 
         listViewObjects = new ArrayList<>();
         userData = new HashMap<>();
-        eveningCollection = databaseController.db.collection(DatabaseController.EVENING_COL);
-        listView = findViewById(R.id.listview);
+        pastEveningCollection = databaseController.db.collection(DatabaseController.PAST_EVENING_COL);
+        listView = findViewById(R.id.listViewPastEvenings);
 
         databaseController.db.collection(DatabaseController.USER_COL)
                 .get()
@@ -68,36 +66,36 @@ public class Activity_anstehende_termine extends AppCompatActivity {
                                 userData.put(id, name);
                             }
                             Log.d(TAG, userData.toString());
-                        ReadEveningTimestamps(new FirestoreCallback() {
-                            @Override
-                            public void onCallback(List<Timestamp> eveningTimestampList, List<Integer> eveningOrganizerList) {
+                            ReadEveningTimestamps(new FirestoreCallback() {
+                                @Override
+                                public void onCallback(List<Timestamp> eveningTimestampList, List<Integer> eveningOrganizerList) {
 
-                                if (listViewObjects.isEmpty()) {
+                                    if (listViewObjects.isEmpty()) {
 
 
-                                    SimpleDateFormat sdfTime = new SimpleDateFormat("EEE dd.MM.yyyy - HH:mm");
-                                    for (int i = 0; i < timestampList.size(); i++) {
+                                        SimpleDateFormat sdfTime = new SimpleDateFormat("EEE dd.MM.yyyy - HH:mm");
+                                        for (int i = 0; i < timestampList.size(); i++) {
 
-                                        String time = sdfTime.format(timestampList.get(i).toDate());
+                                            String time = sdfTime.format(timestampList.get(i).toDate());
 
-                                        if (userData.containsKey(eveningOrganizerList.get(i))) {
-                                            String name = userData.get(eveningOrganizerList.get(i));
-                                            listViewObjects.add(time + " Bei: " + name);
+                                            if (userData.containsKey(eveningOrganizerList.get(i))) {
+                                                String name = userData.get(eveningOrganizerList.get(i));
+                                                listViewObjects.add(time + " fand statt bei: " + name);
+                                            }
+
+                                            //buttons[i].setText(time + " Uhr, Bei: " + );
                                         }
-
-                                        //buttons[i].setText(time + " Uhr, Bei: " + );
+                                        listView.setAdapter(new ArrayAdapter<String>(
+                                                Activity_past_evenings.this,
+                                                android.R.layout.simple_list_item_1,
+                                                listViewObjects
+                                        ));
                                     }
-                                    listView.setAdapter(new ArrayAdapter<String>(
-                                            Activity_anstehende_termine.this,
-                                            android.R.layout.simple_list_item_1,
-                                            listViewObjects
-                                    ));
                                 }
-                            }
-                        });
+                            });
 
+                        }
                     }
-                }
                 });
     }
 
@@ -110,8 +108,8 @@ public class Activity_anstehende_termine extends AppCompatActivity {
 
             @Override
             public void onItemClick(AdapterView<?> parent, View view,
-                                       int position, long id) {
-                Intent intent = new Intent(Activity_anstehende_termine.this, Activity_evening_details.class);
+                                    int position, long id) {
+                Intent intent = new Intent(Activity_past_evenings.this, Activity_past_evening_details.class);
 
                 long longTime = timestampList.get(position).getSeconds()*1000;
                 intent.putExtra("Timestamp", longTime);
@@ -125,7 +123,7 @@ public class Activity_anstehende_termine extends AppCompatActivity {
 
     //Methode zur Callback Funktion
     private void ReadEveningTimestamps(final FirestoreCallback firestoreCallback) {
-        eveningCollection.get()
+        pastEveningCollection.get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -142,4 +140,5 @@ public class Activity_anstehende_termine extends AppCompatActivity {
                     }
                 });
     }
+
 }

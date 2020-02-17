@@ -26,7 +26,7 @@
     <string name="btn_messages">Nachrichten</string>
     <string name="btn_settings">Einstellungen</string>
 
-    <string name="btn_groups">Gruppen</string>
+    <string name="btn_groups">Termine</string>
     <string name="btn_settings_messages">Benachrichtigungen</string>
     <string name="btn_settings_profile">Profil</string>
     <string name="btn_show_groups">Aktuelle Gruppen</string>
@@ -67,7 +67,7 @@
     <string name="text_settings_group_warning">Beim Aktualisieren werden die zukünftigen Termine ebenfalls aktualisiert. Dies führt zu Verlusten bei den bereits getätigten Spielevorschlägen!</string>
     <string name="hinweis">Hinweis:</string>
     <string name="wochentag">Wochentag:</string>
-    <string name="gruppeneinstellungen_aktualisieren">Gruppeneinstellungen aktualisieren</string>
+    <string name="gruppeneinstellungen_aktualisieren">Termineinstellungen aktualisieren</string>
     <string name="uhrzeit">Uhrzeit:</string>
     <string name="Text_uhrzeit">Uhrzeit</string>
     <string name="w_hle_ein_spiel_aus">Wähle ein Spiel aus</string>

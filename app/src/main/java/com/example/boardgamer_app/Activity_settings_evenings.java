@@ -8,7 +8,6 @@ import android.app.AlertDialog;
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -38,9 +37,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import javax.xml.transform.Result;
-
-public class Main4Activity extends AppCompatActivity implements TimePickerDialog.OnTimeSetListener{
+public class Activity_settings_evenings extends AppCompatActivity implements TimePickerDialog.OnTimeSetListener{
 
     //Interface Callback Funktion
     private interface FirestoreCallback {
@@ -80,13 +77,13 @@ public class Main4Activity extends AppCompatActivity implements TimePickerDialog
         button = findViewById(R.id.btnTime);
 
         //Wochentag Adapter
-        ArrayAdapter<String> adapterWeekdays = new ArrayAdapter<String>(Main4Activity.this,
+        ArrayAdapter<String> adapterWeekdays = new ArrayAdapter<String>(Activity_settings_evenings.this,
                 android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.weekdays));
         adapterWeekdays.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerWeekdays.setAdapter(adapterWeekdays);
 
         //Intervall Adapter
-        ArrayAdapter<String> adapterInterval = new ArrayAdapter<String>(Main4Activity.this,
+        ArrayAdapter<String> adapterInterval = new ArrayAdapter<String>(Activity_settings_evenings.this,
                 android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.intervals));
         adapterInterval.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerInterval.setAdapter(adapterInterval);
@@ -212,7 +209,7 @@ public class Main4Activity extends AppCompatActivity implements TimePickerDialog
 
     public void onClickRefreshGroup(View view) {
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(Main4Activity.this);
+        AlertDialog.Builder builder = new AlertDialog.Builder(Activity_settings_evenings.this);
         builder.setCancelable(true);
         builder.setTitle("Warnung");
         builder.setMessage("Wirklich die Gruppeneinstellungen aktualisieren? (Daten gehen möglicherweise verloren)");
@@ -396,7 +393,7 @@ public class Main4Activity extends AppCompatActivity implements TimePickerDialog
         lastOrganizerData.put("lastEveningIndex", lastEveningIndex);
         databaseController.UpdateDatabase(DatabaseController.GROUP_COL,DatabaseController.GROUP_SETTINGS_DOC,lastOrganizerData);
 
-        Toast.makeText(Main4Activity.this, "Erfolgreich aktualisiert", Toast.LENGTH_SHORT).show();
+        Toast.makeText(Activity_settings_evenings.this, "Erfolgreich aktualisiert", Toast.LENGTH_SHORT).show();
 
     }
     //Methode zur Callback Funktion

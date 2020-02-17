@@ -9,7 +9,7 @@ import android.widget.Button;
 
 import com.google.firebase.auth.FirebaseAuth;
 
-public class Main3Activity extends AppCompatActivity {
+public class Activity_settings extends AppCompatActivity {
 
     Button btnLogout;
 
@@ -31,7 +31,7 @@ public class Main3Activity extends AppCompatActivity {
             {
                 FirebaseAuth.getInstance().signOut();
 
-                Intent intToMain = new Intent(Main3Activity.this, Activity_login.class);
+                Intent intToMain = new Intent(Activity_settings.this, Activity_login.class);
                 startActivity(intToMain);
             }
         });
@@ -40,19 +40,19 @@ public class Main3Activity extends AppCompatActivity {
 
     public void onClickGruppen (View Button)
     {
-        Intent changeIntent = new Intent (Main3Activity.this, Main4Activity.class);
+        Intent changeIntent = new Intent (Activity_settings.this, Activity_settings_evenings.class);
         startActivity(changeIntent);
     }
 
     public void onClickBenachrichtigungen (View Button)
     {
-        Intent changeIntent = new Intent (Main3Activity.this, Main5Activity.class);
+        Intent changeIntent = new Intent (Activity_settings.this, Activity_settings_notifications.class);
         startActivity(changeIntent);
     }
 
     public void onClickProfil (View Button)
     {
-        Intent changeIntent = new Intent (Main3Activity.this, Main6Activity.class);
+        Intent changeIntent = new Intent (Activity_settings.this, Activity_settings_user.class);
         startActivity(changeIntent);
     }
 }

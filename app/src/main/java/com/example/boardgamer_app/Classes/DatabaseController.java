@@ -277,6 +277,7 @@ public class DatabaseController {
                                                     Log.d(TAG, "Map= " +data.toString());
                                                     writeInDatabase(DatabaseController.PAST_EVENING_COL, "Termin" + newId, data);
                                                     snapshot2.getReference().delete();
+                                                    GenerateNewEvening();
                                                 }
                                         }
                                     });

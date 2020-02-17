@@ -25,33 +25,34 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class Activity_vergangene_termine extends AppCompatActivity {
+public class Activity_evenings extends AppCompatActivity {
 
     //Interface Callback Funktion
     private interface FirestoreCallback {
         void onCallback(List<Timestamp> eveningTimestampList, List<Integer> eveningOrganizerList);
     }
 
-    private static final String TAG = "Activity_vergangene_ter";
+    private static final String TAG = "Activity_anstehende_ter";
 
     private ListView listView;
     private ArrayList<String> listViewObjects;
-    private CollectionReference pastEveningCollection;
+    private CollectionReference eveningCollection;
     private Map<Integer, String> userData;
 
     ArrayList<Timestamp> timestampList = new ArrayList();
     ArrayList<Integer> eveningOrganizerList = new ArrayList();
 
     DatabaseController databaseController = new DatabaseController();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_vergangene_termine);
+        setContentView(R.layout.activity_anstehende_termine);
 
         listViewObjects = new ArrayList<>();
         userData = new HashMap<>();
-        pastEveningCollection = databaseController.db.collection(DatabaseController.PAST_EVENING_COL);
-        listView = findViewById(R.id.listViewPastEvenings);
+        eveningCollection = databaseController.db.collection(DatabaseController.EVENING_COL);
+        listView = findViewById(R.id.listview);
 
         databaseController.db.collection(DatabaseController.USER_COL)
                 .get()
@@ -66,36 +67,36 @@ public class Activity_vergangene_termine extends AppCompatActivity {
                                 userData.put(id, name);
                             }
                             Log.d(TAG, userData.toString());
-                            ReadEveningTimestamps(new FirestoreCallback() {
-                                @Override
-                                public void onCallback(List<Timestamp> eveningTimestampList, List<Integer> eveningOrganizerList) {
+                        ReadEveningTimestamps(new FirestoreCallback() {
+                            @Override
+                            public void onCallback(List<Timestamp> eveningTimestampList, List<Integer> eveningOrganizerList) {
 
-                                    if (listViewObjects.isEmpty()) {
+                                if (listViewObjects.isEmpty()) {
 
 
-                                        SimpleDateFormat sdfTime = new SimpleDateFormat("EEE dd.MM.yyyy - HH:mm");
-                                        for (int i = 0; i < timestampList.size(); i++) {
+                                    SimpleDateFormat sdfTime = new SimpleDateFormat("EEE dd.MM.yyyy - HH:mm");
+                                    for (int i = 0; i < timestampList.size(); i++) {
 
-                                            String time = sdfTime.format(timestampList.get(i).toDate());
+                                        String time = sdfTime.format(timestampList.get(i).toDate());
 
-                                            if (userData.containsKey(eveningOrganizerList.get(i))) {
-                                                String name = userData.get(eveningOrganizerList.get(i));
-                                                listViewObjects.add(time + " fand statt bei: " + name);
-                                            }
-
-                                            //buttons[i].setText(time + " Uhr, Bei: " + );
+                                        if (userData.containsKey(eveningOrganizerList.get(i))) {
+                                            String name = userData.get(eveningOrganizerList.get(i));
+                                            listViewObjects.add(time + " Bei: " + name);
                                         }
-                                        listView.setAdapter(new ArrayAdapter<String>(
-                                                Activity_vergangene_termine.this,
-                                                android.R.layout.simple_list_item_1,
-                                                listViewObjects
-                                        ));
-                                    }
-                                }
-                            });
 
-                        }
+                                        //buttons[i].setText(time + " Uhr, Bei: " + );
+                                    }
+                                    listView.setAdapter(new ArrayAdapter<String>(
+                                            Activity_evenings.this,
+                                            android.R.layout.simple_list_item_1,
+                                            listViewObjects
+                                    ));
+                                }
+                            }
+                        });
+
                     }
+                }
                 });
     }
 
@@ -108,8 +109,8 @@ public class Activity_vergangene_termine extends AppCompatActivity {
 
             @Override
             public void onItemClick(AdapterView<?> parent, View view,
-                                    int position, long id) {
-                Intent intent = new Intent(Activity_vergangene_termine.this, Activity_past_evening_details.class);
+                                       int position, long id) {
+                Intent intent = new Intent(Activity_evenings.this, Activity_evening_details.class);
 
                 long longTime = timestampList.get(position).getSeconds()*1000;
                 intent.putExtra("Timestamp", longTime);
@@ -123,7 +124,7 @@ public class Activity_vergangene_termine extends AppCompatActivity {
 
     //Methode zur Callback Funktion
     private void ReadEveningTimestamps(final FirestoreCallback firestoreCallback) {
-        pastEveningCollection.get()
+        eveningCollection.get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -140,5 +141,4 @@ public class Activity_vergangene_termine extends AppCompatActivity {
                     }
                 });
     }
-
 }

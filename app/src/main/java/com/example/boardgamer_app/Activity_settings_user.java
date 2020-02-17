@@ -17,7 +17,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import static com.example.boardgamer_app.MainActivity.KEY_NAME;
 
-public class Main6Activity extends AppCompatActivity {
+public class Activity_settings_user extends AppCompatActivity {
 
     private static final String TAG = "Main6Activity";
 
@@ -45,7 +45,7 @@ public class Main6Activity extends AppCompatActivity {
                 .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>(){
                     @Override
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
-                        Toast.makeText(Main6Activity.this,"Daten geladen", Toast.LENGTH_LONG).show();
+                        Toast.makeText(Activity_settings_user.this,"Daten geladen", Toast.LENGTH_LONG).show();
                         if( documentSnapshot.exists())
                         {
                             //und hiermit das Feld "name"
@@ -56,7 +56,7 @@ public class Main6Activity extends AppCompatActivity {
                         else
                         {
                             //bei fehlenden Daten
-                            Toast.makeText(Main6Activity.this,"Daten nicht vorhanden", Toast.LENGTH_LONG).show();
+                            Toast.makeText(Activity_settings_user.this,"Daten nicht vorhanden", Toast.LENGTH_LONG).show();
                         }
                     }
                 })
