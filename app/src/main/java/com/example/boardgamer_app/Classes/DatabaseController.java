@@ -39,6 +39,8 @@ public class DatabaseController {
 
     public final static String GROUP_SETTINGS_DOC = "Gruppeneinstellungen";
 
+    public final static int SECONDS_AFTER_NOW_FOR_PAST_EVENING = 14400; //4 Stunden
+
     public FirebaseAuth mFirebaseAuth;
     public FirebaseFirestore db;
 
@@ -249,7 +251,7 @@ public class DatabaseController {
                         if (task.isSuccessful()) {
                             documentSnapshotList.clear();
                             for (DocumentSnapshot snapshot : task.getResult()) {
-                                if (snapshot.getTimestamp("Datum").getSeconds() < Timestamp.now().getSeconds()) {
+                                if (snapshot.getTimestamp("Datum").getSeconds() < Timestamp.now().getSeconds() + SECONDS_AFTER_NOW_FOR_PAST_EVENING) {
                                     documentSnapshotList.add(snapshot);
                                 }
                             }

@@ -64,7 +64,7 @@
     <string name="btn_register">Registrieren</string>
     <string name="text_isMemberSince">Mitglied seit:</string>
     <string name="text_username">Benutzername</string>
-    <string name="text_settings_group_warning">Beim Aktualisieren werden die zukünftigen Termine ebenfalls aktualisiert. Dies führt zu Verlusten bei den bereits getätigten Spielevorschlägen!</string>
+    <string name="text_settings_group_warning">Beim Aktualisieren werden die zukünftigen Termine ebenfalls aktualisiert. Dies führt zu Verlusten bei den bereits getätigten Spielevorschlägen! Vergangene Termine sind davon nicht betroffen.</string>
     <string name="hinweis">Hinweis:</string>
     <string name="wochentag">Wochentag:</string>
     <string name="gruppeneinstellungen_aktualisieren">Termineinstellungen aktualisieren</string>

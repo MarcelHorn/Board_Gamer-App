@@ -269,7 +269,7 @@ public class Activity_settings_evenings extends AppCompatActivity implements Tim
 
 
         databaseController.UpdateDatabase(DatabaseController.GROUP_COL, DatabaseController.GROUP_SETTINGS_DOC, dataGroup);
-        
+
 
         //Die Callback Funktion ist nötig, da das Laden aus der DB asynchron zum normalen Codeverlauf abläuft (Daten werden ausgelesen bevor sie geladen sind)
         //holt alle Id"s der Registrierten User und packt sie in eine Array-List

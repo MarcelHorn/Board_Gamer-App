@@ -53,6 +53,7 @@ public class Activity_evening_details extends AppCompatActivity implements Dialo
     int likes, userId;
 
     boolean userLikedGame[] = new boolean[10];
+    boolean gameAlreadyExist;
     public List<Game> listViewObjects;
 
 
@@ -200,10 +201,21 @@ public class Activity_evening_details extends AppCompatActivity implements Dialo
     @Override
     public void sendInput(String input) {
         Log.d(TAG, "sendInput: got the Input");
-        Game newGame = new Game();
-        newGame.setName(input);
-        newGame.setLikes(0);
-        listViewObjects.add(newGame);
-        LoadGames();
+        gameAlreadyExist = false;
+        for (Game game : listViewObjects) {
+            if (game.getName().equals(input)) {
+                gameAlreadyExist = true;
+            }
+        }
+        if (!gameAlreadyExist) {
+             Game newGame = new Game();
+             newGame.setName(input);
+             newGame.setLikes(0);
+             listViewObjects.add(newGame);
+             LoadGames();
+         } else {
+             Toast.makeText(Activity_evening_details.this, "Spiel wird bereits vorgeschlagen!" , Toast.LENGTH_SHORT).show();
+         }
+
     }
 }

@@ -157,5 +157,6 @@ public class Activity_messages extends AppCompatActivity implements DialogMessag
                 android.R.layout.simple_list_item_1,
                 listViewObjects)
         );
+
     }
 }
