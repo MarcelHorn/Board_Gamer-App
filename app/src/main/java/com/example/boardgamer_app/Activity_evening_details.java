@@ -70,7 +70,9 @@ public class Activity_evening_details extends AppCompatActivity implements Dialo
 
         Long longTime = getIntent().getLongExtra("Timestamp", 0);
         organizerName = getIntent().getStringExtra("Organizer");
-        eveningId = getIntent().getIntExtra("Id", 0);
+        eveningId = getIntent().getIntExtra("id", 0);
+        Log.d(TAG, "onCreate: " + eveningId);
+
 
         //Laden der User Id aus der Datenbank
         databaseController.db
@@ -86,7 +88,7 @@ public class Activity_evening_details extends AppCompatActivity implements Dialo
 
                         //Laden der Spielevorschläge, NACHDEM die User Id geladen wurde
                         databaseController.db
-                                .collection("Spielevorschläge")
+                                .collection(DatabaseController.EVENING_COL)
                                 .document("Termin"+eveningId)
                                 .get()
                                 .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>()
@@ -169,7 +171,7 @@ public class Activity_evening_details extends AppCompatActivity implements Dialo
             data.put("Game"+ (i+1)+"User" + userId, listViewObjects.get(i).isUserId());
         }
 
-        databaseController.writeInDatabase("Spielevorschläge", "Termin" + eveningId, data);
+        databaseController.writeInDatabase(DatabaseController.EVENING_COL, "Termin" + eveningId, data);
 
     }
 

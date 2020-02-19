@@ -39,6 +39,8 @@ public class Activity_past_evenings extends AppCompatActivity {
     private CollectionReference pastEveningCollection;
     private Map<Integer, String> userData;
 
+    int userId;
+
     ArrayList<Timestamp> timestampList = new ArrayList();
     ArrayList<Integer> eveningOrganizerList = new ArrayList();
 
@@ -52,6 +54,8 @@ public class Activity_past_evenings extends AppCompatActivity {
         userData = new HashMap<>();
         pastEveningCollection = databaseController.db.collection(DatabaseController.PAST_EVENING_COL);
         listView = findViewById(R.id.listViewPastEvenings);
+
+        userId = getIntent().getIntExtra("UserNameId", 0);
 
         databaseController.db.collection(DatabaseController.USER_COL)
                 .get()
@@ -115,6 +119,7 @@ public class Activity_past_evenings extends AppCompatActivity {
                 intent.putExtra("Timestamp", longTime);
                 intent.putExtra("Organizer", userData.get(eveningOrganizerList.get(position)));
                 intent.putExtra("Id", position+1);
+                intent.putExtra("UserNameId", userId);
                 startActivity(intent);
             }
         });

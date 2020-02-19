@@ -75,6 +75,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void onClickVergangeneTermine (View Button) {
         Intent changeIntent = new Intent (MainActivity.this, Activity_past_evenings.class);
+        changeIntent.putExtra("UserNameId", userId);
         startActivity(changeIntent);
     }
 

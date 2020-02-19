@@ -29,7 +29,7 @@ public class Activity_evenings extends AppCompatActivity {
 
     //Interface Callback Funktion
     private interface FirestoreCallback {
-        void onCallback(List<Timestamp> eveningTimestampList, List<Integer> eveningOrganizerList);
+        void onCallback(List<Timestamp> eveningTimestampList, List<Integer> eveningOrganizerList, List<Integer> eveningIdList);
     }
 
     private static final String TAG = "Activity_anstehende_ter";
@@ -41,6 +41,7 @@ public class Activity_evenings extends AppCompatActivity {
 
     ArrayList<Timestamp> timestampList = new ArrayList();
     ArrayList<Integer> eveningOrganizerList = new ArrayList();
+    ArrayList<Integer> eveningIdList = new ArrayList<>();
 
     DatabaseController databaseController = new DatabaseController();
 
@@ -69,7 +70,7 @@ public class Activity_evenings extends AppCompatActivity {
                             Log.d(TAG, userData.toString());
                         ReadEveningTimestamps(new FirestoreCallback() {
                             @Override
-                            public void onCallback(List<Timestamp> eveningTimestampList, List<Integer> eveningOrganizerList) {
+                            public void onCallback(List<Timestamp> eveningTimestampList, List<Integer> eveningOrganizerList, List<Integer> eveningIdList) {
 
                                 if (listViewObjects.isEmpty()) {
 
@@ -115,7 +116,7 @@ public class Activity_evenings extends AppCompatActivity {
                 long longTime = timestampList.get(position).getSeconds()*1000;
                 intent.putExtra("Timestamp", longTime);
                 intent.putExtra("Organizer", userData.get(eveningOrganizerList.get(position)));
-                intent.putExtra("Id", position+1);
+                intent.putExtra("id",  eveningIdList.get(position));
                 startActivity(intent);
             }
         });
@@ -135,8 +136,10 @@ public class Activity_evenings extends AppCompatActivity {
                                 int i = snapshots.getLong("Organizer").intValue();
                                 eveningOrganizerList.add(i);
                                 int id = snapshots.getLong("id").intValue();
+                                eveningIdList.add(id);
+
                             }
-                            firestoreCallback.onCallback(timestampList, eveningOrganizerList );
+                            firestoreCallback.onCallback(timestampList, eveningOrganizerList, eveningIdList );
                         }
                     }
                 });

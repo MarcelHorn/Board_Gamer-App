@@ -52,7 +52,7 @@ public class Activity_messages extends AppCompatActivity implements DialogMessag
         buttonCreate = findViewById(R.id.btnCreateMessage);
         listView = findViewById(R.id.listViewMessages);
         listViewObjects = new ArrayList<>();
-        sdfShort = new SimpleDateFormat("dd.MM-HH:mm:ss");
+        sdfShort = new SimpleDateFormat("MM.dd-HH:mm:ss");
         sdfDetail = new SimpleDateFormat("EEE dd.MM - HH:mm:ss");
 
         buttonCreate.setOnClickListener(new View.OnClickListener()

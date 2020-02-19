@@ -273,6 +273,10 @@ public class DatabaseController {
                                                     data.put("Datum", snapshot2.getTimestamp("Datum"));
                                                     data.put("Organizer", snapshot2.getLong("Organizer").intValue());
                                                     data.put("id", newId);
+                                                    data.put("BewertungVer", 0);
+                                                    data.put("BewertungFood", 0);
+                                                    data.put("BewertungAllg", 0);
+                                                    data.put("AnzahlBewertungen", 0);
 
                                                     Log.d(TAG, "Map= " +data.toString());
                                                     writeInDatabase(DatabaseController.PAST_EVENING_COL, "Termin" + newId, data);

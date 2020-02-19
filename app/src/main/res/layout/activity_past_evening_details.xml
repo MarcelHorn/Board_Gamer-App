@@ -31,27 +31,53 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:text="Wie hat dir diese Veranstalltung gefallen? Bitte bewerte es und schreibe eine kurze Nachricht." />
+            android:layout_marginBottom="10dp"
+            android:text="Wie hat dir dieser Spieleabend gefallen?" />
+
+        <TextView
+            android:id="@+id/textRatingOrganizer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Gastgeber:" />
 
         <RatingBar
-            android:id="@+id/ratingBar"
+            android:id="@+id/ratingBarOrganizer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
+            android:layout_marginBottom="10dp"
             android:numStars="5"
             android:stepSize="1" />
 
-        <EditText
-            android:id="@+id/editText"
+        <TextView
+            android:id="@+id/textRatingFood"
             android:layout_width="match_parent"
-            android:layout_height="109dp"
-            android:ems="10"
-            android:gravity="start|top"
-            android:inputType="textMultiLine"
-            android:maxLength="128" />
+            android:layout_height="wrap_content"
+            android:text="Essen:" />
+
+        <RatingBar
+            android:id="@+id/ratingBarFood"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:numStars="5"
+            android:stepSize="1" />
+
+        <TextView
+            android:id="@+id/textRatingGeneral"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Abend allgemein:" />
+
+        <RatingBar
+            android:id="@+id/ratingBarGeneral"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:numStars="5"
+            android:stepSize="1" />
 
         <Button
-            android:id="@+id/button6"
+            android:id="@+id/btnCreateRating"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/custom_button"

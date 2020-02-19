@@ -32,6 +32,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -55,6 +56,7 @@ public class Activity_settings_evenings extends AppCompatActivity implements Tim
     Spinner spinnerWeekdays, spinnerInterval;
     Button button;
     Evening evening;
+    Timestamp time;
     ArrayList<Integer> userIdList = new ArrayList();
 
 
@@ -117,15 +119,16 @@ public class Activity_settings_evenings extends AppCompatActivity implements Tim
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
                         if (documentSnapshot.exists()) {
                             int interval = documentSnapshot.getLong("RhythmusIndex").intValue();
-                            String time = documentSnapshot.getString("Uhrzeit");
+                            time = documentSnapshot.getTimestamp("Uhrzeit");
                             int weekday = documentSnapshot.getLong("Wochentag").intValue();
                             memberCount = documentSnapshot.getLong("AnzahlMitgliederIndex").intValue();
-                            lastEveningIndex = documentSnapshot.getLong("lastEveningIndex").intValue();
                             lastOrganizer = documentSnapshot.getLong("lastOrganizer").intValue();
+
+                            SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
 
                             spinnerWeekdays.setSelection(weekday - 1);
                             spinnerInterval.setSelection(interval);
-                            button.setText(time + " Uhr");
+                            button.setText(sdf.format(time.toDate()) + " Uhr");
                         }
                     }
                 });
@@ -217,7 +220,7 @@ public class Activity_settings_evenings extends AppCompatActivity implements Tim
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        RefreshGroup();
+                        DeleteOldEvenings();
                     }
                 });
         builder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
@@ -235,9 +238,25 @@ public class Activity_settings_evenings extends AppCompatActivity implements Tim
     }//Ende des Aktualisierungs-Buttons
 
 
+    private void DeleteOldEvenings() {
+        databaseController.db.collection(DatabaseController.EVENING_COL)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful() && task.getResult() != null) {
+                            for (DocumentSnapshot snapshot : task.getResult()) {
+                                snapshot.getReference().delete();
+                            }
+                            RefreshGroup();
+                        }
+                    }
+                });
+    }
+
     private void RefreshGroup() {
-        SimpleDateFormat sdfTime = new SimpleDateFormat("HH:mm");
-        String time = sdfTime.format(calendar.getTime());
+        lastEveningIndex = 1;
+
         CalculateInterval();
         CalculateFirstEvening();
 
@@ -250,147 +269,146 @@ public class Activity_settings_evenings extends AppCompatActivity implements Tim
 
 
         databaseController.UpdateDatabase(DatabaseController.GROUP_COL, DatabaseController.GROUP_SETTINGS_DOC, dataGroup);
-
-        //Berechnung der 5 Termine basierend am Rhythmus
-        Timestamp timestamp = new Timestamp(firstDate.getTime());
-
-        Calendar termin2 = (Calendar) firstDate.clone();
-        termin2.add(Calendar.DATE, interval);
-        Timestamp timestamp2 = new Timestamp(termin2.getTime());
-
-        Calendar termin3 = (Calendar) termin2.clone();
-        termin3.add(Calendar.DATE, interval);
-        Timestamp timestamp3 = new Timestamp(termin3.getTime());
-
-        Calendar termin4 = (Calendar) termin3.clone();
-        termin4.add(Calendar.DATE, interval);
-        Timestamp timestamp4 = new Timestamp(termin4.getTime());
-
-        Calendar termin5 = (Calendar) termin4.clone();
-        termin5.add(Calendar.DATE, interval);
-        Timestamp timestamp5 = new Timestamp(termin5.getTime());
-
-
+        
 
         //Die Callback Funktion ist nötig, da das Laden aus der DB asynchron zum normalen Codeverlauf abläuft (Daten werden ausgelesen bevor sie geladen sind)
         //holt alle Id"s der Registrierten User und packt sie in eine Array-List
         ReadUserId(new FirestoreCallback() {
             @Override
             public void onCallback(List<Integer> userIdList) {
+
+                //Berechnung der 5 Termine basierend am Rhythmus
+                Timestamp timestamp = new Timestamp(firstDate.getTime());
+
+                Calendar termin2 = (Calendar) firstDate.clone();
+                termin2.add(Calendar.DATE, interval);
+                Timestamp timestamp2 = new Timestamp(termin2.getTime());
+
+                Calendar termin3 = (Calendar) termin2.clone();
+                termin3.add(Calendar.DATE, interval);
+                Timestamp timestamp3 = new Timestamp(termin3.getTime());
+
+                Calendar termin4 = (Calendar) termin3.clone();
+                termin4.add(Calendar.DATE, interval);
+                Timestamp timestamp4 = new Timestamp(termin4.getTime());
+
+                Calendar termin5 = (Calendar) termin4.clone();
+                termin5.add(Calendar.DATE, interval);
+                Timestamp timestamp5 = new Timestamp(termin5.getTime());
+
+                //erster Termin
+
+                evening.setDate(timestamp);
+                evening.setEveningName("Termin"+lastEveningIndex);
+
+                //for-Schleife die alle Id's der User anspricht
+                for (int i = 0; i<userIdList.size(); i++)
+                {
+                    //Wenn der letze User den voherigen Termin abgehalten hat, fange von vorne an
+
+                    if (lastOrganizer > memberCount) {
+                        lastOrganizer = 1;
+                    }
+                    //
+                    if (lastOrganizer == userIdList.get(i)) {
+                        lastOrganizer += 1; //erhöhe um 1, damit im nächsten termin ein anderer Veranstallter gewählt wird
+                        Map<String, Object> dataDate = new HashMap<>();
+                        dataDate.put("Organizer", userIdList.get(i));
+                        dataDate.put("Datum", evening.getDate());
+                        dataDate.put("id", lastEveningIndex);
+                        lastEveningIndex++;
+                        databaseController.writeInDatabase(DatabaseController.EVENING_COL, evening.getEveningName(), dataDate);
+                        //stoppt die for schleife, wenn der passende User gefunden wird
+                        break;
+                    }
+                }
+
+                //Zweiter termin
+                evening.setDate(timestamp2);
+                evening.setEveningName("Termin"+lastEveningIndex);
+                for (int i = 0; i<userIdList.size(); i++)
+                {
+                    if (lastOrganizer > memberCount) {
+                        lastOrganizer = 1;
+                    }
+                    if (lastOrganizer == userIdList.get(i)) {
+                        lastOrganizer += 1;
+                        Map<String, Object> dataDate2 = new HashMap<>();
+                        dataDate2.put("Organizer", userIdList.get(i));
+                        dataDate2.put("Datum", evening.getDate());
+                        dataDate2.put("id", lastEveningIndex);
+                        lastEveningIndex++;
+                        databaseController.writeInDatabase(DatabaseController.EVENING_COL, evening.getEveningName(), dataDate2);
+                        break;
+                    }
+                }
+
+                //dritter Termin
+                evening.setDate(timestamp3);
+                evening.setEveningName("Termin"+lastEveningIndex);
+                for (int i = 0; i<userIdList.size(); i++)
+                {
+                    if (lastOrganizer > memberCount) {
+                        lastOrganizer = 1;
+                    }
+                    if (lastOrganizer == userIdList.get(i)) {
+                        lastOrganizer += 1;
+                        Map<String, Object> dataDate3 = new HashMap<>();
+                        dataDate3.put("Organizer", userIdList.get(i));
+                        dataDate3.put("Datum", evening.getDate());
+                        dataDate3.put("id", lastEveningIndex);
+                        lastEveningIndex++;
+                        databaseController.writeInDatabase(DatabaseController.EVENING_COL, evening.getEveningName(), dataDate3);
+                        break;
+                    }
+                }
+
+                //vierter Termin
+                evening.setDate(timestamp4);
+                evening.setEveningName("Termin"+lastEveningIndex);
+                for (int i = 0; i<userIdList.size(); i++)
+                {
+                    if (lastOrganizer > memberCount) {
+                        lastOrganizer = 1;
+                    }
+                    if (lastOrganizer == userIdList.get(i)) {
+                        lastOrganizer += 1;
+                        Map<String, Object> dataDate4 = new HashMap<>();
+                        dataDate4.put("Organizer", userIdList.get(i));
+                        dataDate4.put("Datum", evening.getDate());
+                        dataDate4.put("id", lastEveningIndex);
+                        lastEveningIndex++;
+                        databaseController.writeInDatabase(DatabaseController.EVENING_COL, evening.getEveningName(), dataDate4);
+                        break;
+                    }
+                }
+
+                //fünfter Termin
+                evening.setDate(timestamp5);
+                evening.setEveningName("Termin"+lastEveningIndex);
+                for (int i = 0; i<userIdList.size(); i++)
+                {
+                    if (lastOrganizer > memberCount) {
+                        lastOrganizer = 1;
+                    }
+                    if (lastOrganizer == userIdList.get(i)) {
+                        lastOrganizer += 1;
+                        Map<String, Object> dataDate5 = new HashMap<>();
+                        dataDate5.put("Organizer", userIdList.get(i));
+                        dataDate5.put("Datum", evening.getDate());
+                        dataDate5.put("id", lastEveningIndex);
+                        lastEveningIndex++;
+                        databaseController.writeInDatabase(DatabaseController.EVENING_COL, evening.getEveningName(), dataDate5);
+                        break;
+                    }
+                }
             }
         });
-
-        //erster Termin
-        evening.setDate(timestamp);
-        evening.setEveningName("Termin1");
-
-        //for-Schleife die alle Id's der User anspricht
-        for (int i = 0; i<userIdList.size(); i++)
-        {
-            //Wenn der letze User den voherigen Termin abgehalten hat, fange von vorne an
-
-            if (lastOrganizer > memberCount) {
-                lastOrganizer = 1;
-            }
-            //
-            if (lastOrganizer == userIdList.get(i)) {
-                lastOrganizer += 1; //erhöhe um 1, damit im nächsten termin ein anderer Veranstallter gewählt wird
-                Map<String, Object> dataDate = new HashMap<>();
-                dataDate.put("Organizer", userIdList.get(i));
-                dataDate.put("Datum", evening.getDate());
-                lastEveningIndex++;
-                dataDate.put("id", lastEveningIndex);
-                databaseController.writeInDatabase(DatabaseController.EVENING_COL, evening.getEveningName(), dataDate);
-                //stoppt die for schleife, wenn der passende User gefunden wird
-                break;
-            }
-        }
-
-        //Zweiter termin
-        evening.setDate(timestamp2);
-        evening.setEveningName("Termin2");
-        for (int i = 0; i<userIdList.size(); i++)
-        {
-            if (lastOrganizer > memberCount) {
-                lastOrganizer = 1;
-            }
-            if (lastOrganizer == userIdList.get(i)) {
-                lastOrganizer += 1;
-                Map<String, Object> dataDate2 = new HashMap<>();
-                dataDate2.put("Organizer", userIdList.get(i));
-                dataDate2.put("Datum", evening.getDate());
-                lastEveningIndex++;
-                dataDate2.put("id", lastEveningIndex);
-                databaseController.writeInDatabase(DatabaseController.EVENING_COL, evening.getEveningName(), dataDate2);
-                break;
-            }
-        }
-
-        //dritter Termin
-        evening.setDate(timestamp3);
-        evening.setEveningName("Termin3");
-        for (int i = 0; i<userIdList.size(); i++)
-        {
-            if (lastOrganizer > memberCount) {
-                lastOrganizer = 1;
-            }
-            if (lastOrganizer == userIdList.get(i)) {
-                lastOrganizer += 1;
-                Map<String, Object> dataDate3 = new HashMap<>();
-                dataDate3.put("Organizer", userIdList.get(i));
-                dataDate3.put("Datum", evening.getDate());
-                lastEveningIndex++;
-                dataDate3.put("id", lastEveningIndex);
-                databaseController.writeInDatabase(DatabaseController.EVENING_COL, evening.getEveningName(), dataDate3);
-                break;
-            }
-        }
-
-        //vierter Termin
-        evening.setDate(timestamp4);
-        evening.setEveningName("Termin4");
-        for (int i = 0; i<userIdList.size(); i++)
-        {
-            if (lastOrganizer > memberCount) {
-                lastOrganizer = 1;
-            }
-            if (lastOrganizer == userIdList.get(i)) {
-                lastOrganizer += 1;
-                Map<String, Object> dataDate4 = new HashMap<>();
-                dataDate4.put("Organizer", userIdList.get(i));
-                dataDate4.put("Datum", evening.getDate());
-                lastEveningIndex++;
-                dataDate4.put("id", lastEveningIndex);
-                databaseController.writeInDatabase(DatabaseController.EVENING_COL, evening.getEveningName(), dataDate4);
-                break;
-            }
-        }
-
-        //fünfter Termin
-        evening.setDate(timestamp5);
-        evening.setEveningName("Termin5");
-        for (int i = 0; i<userIdList.size(); i++)
-        {
-            if (lastOrganizer > memberCount) {
-                lastOrganizer = 1;
-            }
-            if (lastOrganizer == userIdList.get(i)) {
-                lastOrganizer += 1;
-                Map<String, Object> dataDate5 = new HashMap<>();
-                dataDate5.put("Organizer", userIdList.get(i));
-                dataDate5.put("Datum", evening.getDate());
-                lastEveningIndex++;
-                dataDate5.put("id", lastEveningIndex);
-                databaseController.writeInDatabase(DatabaseController.EVENING_COL, evening.getEveningName(), dataDate5);
-                break;
-            }
-        }
 
 
         //Updatet am Ende den "lastOrganizer", also der Veranstallter des 5.ten Termins, damit beim nächsten Terminupdate die Reihenfolge fortgesetzt wird
         Map<String, Object> lastOrganizerData = new HashMap<>();
         lastOrganizerData.put("lastOrganizer", lastOrganizer);
-        lastOrganizerData.put("lastEveningIndex", lastEveningIndex);
         databaseController.UpdateDatabase(DatabaseController.GROUP_COL,DatabaseController.GROUP_SETTINGS_DOC,lastOrganizerData);
 
         Toast.makeText(Activity_settings_evenings.this, "Erfolgreich aktualisiert", Toast.LENGTH_SHORT).show();
@@ -425,6 +443,10 @@ public class Activity_settings_evenings extends AppCompatActivity implements Tim
     {
         calendar.set(Calendar.HOUR_OF_DAY, i);
         calendar.set(Calendar.MINUTE, i1);
+        Date date = new Date();
+        date = calendar.getTime();
+        Timestamp newTs = new Timestamp(date);
+        time = newTs;
         if (i1 == 0)
         {
             button.setText( i + ":00 Uhr");    //damit bei z.B. 12 Uhr 12:00 angezeigt wird, statt 12:0
