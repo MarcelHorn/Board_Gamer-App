@@ -9,40 +9,56 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Activity_past_evening_details"
-                  android:label="Vergangener Termin"></activity>
-        <activity android:name=".Activity_past_evenings"
-                  android:label="Vergangene Termine"/>
-        <activity android:name=".Activity_evening_details"
-                  android:label="Termin"/>
         <activity
-            android:name=".Activity_login"
-            android:label="OnBoard">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+            android:name=".Activity_past_evening_details"
+            android:label="Vergangener Termin"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".Activity_past_evenings"
+            android:label="Vergangene Termine"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".Activity_evening_details"
+            android:label="Termin"
+            android:screenOrientation="portrait"/>
+        <activity
+                android:name=".Activity_login"
+                android:label="OnBoard"
+                android:screenOrientation="portrait">
+                <intent-filter>
+                    <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+                    <category android:name="android.intent.category.LAUNCHER" />
+                </intent-filter>
         </activity>
         <activity
             android:name=".Activity_evenings"
-            android:label="Anstehende Termine" />
+            android:label="Anstehende Termine"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".Activity_settings_user"
-            android:label="Benutzereinstellungen" />
+            android:label="Benutzereinstellungen"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".Activity_settings_evenings"
-            android:label="Termineinstellungen" />
+            android:label="Termineinstellungen"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".Activity_settings"
-            android:label="Einstellungen" />
-        <activity android:name=".Activity_messages"
-            android:label="Nachrichten"/>
-        <activity android:name=".MainActivity"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
+            android:label="Einstellungen"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".Activity_messages"
+            android:label="Nachrichten"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".MainActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".Activity_register"
-            android:label="Registrieren" />
+            android:label="Registrieren"
+            android:screenOrientation="portrait"/>
     </application>
 
 </manifest>
