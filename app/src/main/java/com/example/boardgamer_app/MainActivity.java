@@ -4,14 +4,15 @@ package com.example.boardgamer_app;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.content.Intent;
 import android.view.View;
+import androidx.appcompat.widget.Toolbar;
 
 import com.example.boardgamer_app.Classes.DatabaseController;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -28,7 +29,6 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG = "mainActivity";
 
     //Gesamte Datenbank Instanz
-    FirebaseFirestore db = FirebaseFirestore.getInstance();
     DatabaseController databaseController = new DatabaseController();
 
     @Override
@@ -37,9 +37,14 @@ public class MainActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_main);
 
+        Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        setSupportActionBar(myToolbar);
+        myToolbar.setTitleTextColor(Color.WHITE);
+
+
 
         //Laden der User Id aus der Datenbank
-        databaseController.db
+        databaseController.mDatabase
                 .collection(DatabaseController.USER_COL)
                 .document(databaseController.mFirebaseAuth.getCurrentUser().getEmail())
                 .get()

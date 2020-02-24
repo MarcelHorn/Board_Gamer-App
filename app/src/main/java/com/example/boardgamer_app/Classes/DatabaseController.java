@@ -1,7 +1,6 @@
 package com.example.boardgamer_app.Classes;
 
 
-import android.provider.ContactsContract;
 import android.util.Log;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -42,7 +41,7 @@ public class DatabaseController {
     public final static int SECONDS_AFTER_NOW_FOR_PAST_EVENING = 14400; //4 Stunden
 
     public FirebaseAuth mFirebaseAuth;
-    public FirebaseFirestore db;
+    public FirebaseFirestore mDatabase;
 
     Timestamp ts;
     int eveningId, intervalIndex, interval, eveningNameId, organizerId, memberCount;
@@ -54,14 +53,14 @@ public class DatabaseController {
 
     public DatabaseController() {
         mFirebaseAuth = FirebaseAuth.getInstance();
-        db = FirebaseFirestore.getInstance();
+        mDatabase = FirebaseFirestore.getInstance();
 
-        usersCol = db.collection(DatabaseController.USER_COL);
-        groupsCol = db.collection(DatabaseController.GROUP_COL);
-        eveningsCol = db.collection(DatabaseController.EVENING_COL);
-        pastEveningsCol = db.collection(DatabaseController.PAST_EVENING_COL);
+        usersCol = mDatabase.collection(DatabaseController.USER_COL);
+        groupsCol = mDatabase.collection(DatabaseController.GROUP_COL);
+        eveningsCol = mDatabase.collection(DatabaseController.EVENING_COL);
+        pastEveningsCol = mDatabase.collection(DatabaseController.PAST_EVENING_COL);
 
-        groupSettingsDoc = db.collection(DatabaseController.GROUP_COL)
+        groupSettingsDoc = mDatabase.collection(DatabaseController.GROUP_COL)
                              .document(DatabaseController.GROUP_SETTINGS_DOC);
 
         eveningId = 0;
@@ -71,7 +70,7 @@ public class DatabaseController {
 
     //überschreibt alle Felder des Dokuments mit der neuen Map (nicht erwähnte werden gelöscht)
     public void writeInDatabase (String collection, String document, Map<String, Object> field) {
-        db.collection(collection)
+        mDatabase.collection(collection)
                 .document(document)
                 .set(field, SetOptions.merge())
                 //Wenn erfolgreich
@@ -92,7 +91,7 @@ public class DatabaseController {
 
     //Überschreibt nur die in der Map erwähnten Felder ohne nicht erwähnte zu löschen
     public void UpdateDatabase (String collection, String document, Map<String, Object> field) {
-        db.collection(collection)
+        mDatabase.collection(collection)
                 .document(document)
                 .update(field)
                 //Wenn erfolgreich
@@ -112,7 +111,7 @@ public class DatabaseController {
     }
 
     public void UpdateDatabaseOneField (String collection, String document, String field, Object value) {
-        db.collection(collection)
+        mDatabase.collection(collection)
                 .document(document)
                 .update(field, value)
                 //Wenn erfolgreich

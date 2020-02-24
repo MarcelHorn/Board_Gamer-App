@@ -58,6 +58,7 @@ public class Activity_settings_evenings extends AppCompatActivity implements Tim
     Evening evening;
     Timestamp time;
     ArrayList<Integer> userIdList = new ArrayList();
+    boolean isSuccess;
 
 
     @Override
@@ -67,8 +68,8 @@ public class Activity_settings_evenings extends AppCompatActivity implements Tim
 
         //Init von verschiedenen Variablen
         calendar = Calendar.getInstance();
-        userCollection = databaseController.db.collection(DatabaseController.USER_COL);
-        CollectionReference userCollection = databaseController.db.collection(DatabaseController.USER_COL);
+        userCollection = databaseController.mDatabase.collection(DatabaseController.USER_COL);
+        CollectionReference userCollection = databaseController.mDatabase.collection(DatabaseController.USER_COL);
 
         //Evening Objekt
         evening = new Evening();
@@ -111,7 +112,7 @@ public class Activity_settings_evenings extends AppCompatActivity implements Tim
         super.onStart();
 
         //Laden der Daten aus "Gruppeneinstellungen" und Anzeigen in den einzelnen Komponenten
-        databaseController.db.collection(DatabaseController.GROUP_COL)
+        databaseController.mDatabase.collection(DatabaseController.GROUP_COL)
                 .document(DatabaseController.GROUP_SETTINGS_DOC)
                 .get()
                 .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
@@ -198,16 +199,6 @@ public class Activity_settings_evenings extends AppCompatActivity implements Tim
             firstDate.add(Calendar.DATE, 1);
         }
 
-        //TextView textFirstEvening = (TextView) findViewById(R.id.textFirstEvening);
-        //Format ändern auf dd.MM.yyyy zur Übersicht
-        //SimpleDateFormat df = new SimpleDateFormat("EEEE dd.MM.yyyy");
-        //String formattedDate = df.format(firstDate.getTime());
-        ////
-        //textFirstEvening.setText("Erster Spieleabend findet am "  + formattedDate + " statt.");
-
-        //TODO: Uhrzeit muss berücksichtigt werden, damit Termine nicht in der Vergangenheit liegen(gleicher Tag)
-        //Toast.makeText(Activity_create_group.this,date.getTime().toString(),Toast.LENGTH_LONG ).show();
-
     }
 
     public void onClickRefreshGroup(View view) {
@@ -215,11 +206,12 @@ public class Activity_settings_evenings extends AppCompatActivity implements Tim
         AlertDialog.Builder builder = new AlertDialog.Builder(Activity_settings_evenings.this);
         builder.setCancelable(true);
         builder.setTitle("Warnung");
-        builder.setMessage("Wirklich die Gruppeneinstellungen aktualisieren? (Daten gehen möglicherweise verloren)");
+        builder.setMessage("Wirklich die Termineinstellungen aktualisieren? (Daten gehen möglicherweise verloren)");
         builder.setPositiveButton("Bestätigen",
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+                        isSuccess = false;
                         DeleteOldEvenings();
                     }
                 });
@@ -235,11 +227,11 @@ public class Activity_settings_evenings extends AppCompatActivity implements Tim
 
 
 
-    }//Ende des Aktualisierungs-Buttons
+    }
 
 
     private void DeleteOldEvenings() {
-        databaseController.db.collection(DatabaseController.EVENING_COL)
+        databaseController.mDatabase.collection(DatabaseController.EVENING_COL)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -248,6 +240,7 @@ public class Activity_settings_evenings extends AppCompatActivity implements Tim
                             for (DocumentSnapshot snapshot : task.getResult()) {
                                 snapshot.getReference().delete();
                             }
+
                             RefreshGroup();
                         }
                     }
@@ -265,7 +258,6 @@ public class Activity_settings_evenings extends AppCompatActivity implements Tim
         dataGroup.put("Rhythmus", firstDate.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, Locale.getDefault()));
         dataGroup.put("RhythmusIndex", intervalIndex);
         dataGroup.put("Uhrzeit", time);
-        //dataGroup.put("AnzahlMitgliederIndex", 3);
 
 
         databaseController.UpdateDatabase(DatabaseController.GROUP_COL, DatabaseController.GROUP_SETTINGS_DOC, dataGroup);
@@ -276,7 +268,7 @@ public class Activity_settings_evenings extends AppCompatActivity implements Tim
         ReadUserId(new FirestoreCallback() {
             @Override
             public void onCallback(List<Integer> userIdList) {
-
+                isSuccess = true;
                 //Berechnung der 5 Termine basierend am Rhythmus
                 Timestamp timestamp = new Timestamp(firstDate.getTime());
 
@@ -411,7 +403,11 @@ public class Activity_settings_evenings extends AppCompatActivity implements Tim
         lastOrganizerData.put("lastOrganizer", lastOrganizer);
         databaseController.UpdateDatabase(DatabaseController.GROUP_COL,DatabaseController.GROUP_SETTINGS_DOC,lastOrganizerData);
 
-        Toast.makeText(Activity_settings_evenings.this, "Erfolgreich aktualisiert", Toast.LENGTH_SHORT).show();
+        if (isSuccess) {
+            Toast.makeText(Activity_settings_evenings.this, "Erfolgreich aktualisiert", Toast.LENGTH_SHORT).show();
+        }else {
+            Toast.makeText(Activity_settings_evenings.this, "Aktualisierung fehlgeschlagen!", Toast.LENGTH_SHORT).show();
+        }
 
     }
     //Methode zur Callback Funktion
@@ -427,8 +423,10 @@ public class Activity_settings_evenings extends AppCompatActivity implements Tim
                             }
                             firestoreCallback.onCallback(userIdList);
                         }
+
                     }
                 });
+
     }
 
 

@@ -3,9 +3,7 @@ package com.example.boardgamer_app;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.RatingBar;
@@ -17,6 +15,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
 
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -32,6 +31,7 @@ public class Activity_past_evening_details extends AppCompatActivity {
     Integer eveningId;
     int  ratingUserCount, userId;
     float ratingOrganizerCount, ratingFoodCount, ratingGeneralCount;
+    DecimalFormat df;
 
     RatingBar ratingOrganizer, ratingFood, ratingEvening;
     TextView textOrganizer, textFood, textEvening;
@@ -69,6 +69,9 @@ public class Activity_past_evening_details extends AppCompatActivity {
         SimpleDateFormat sdfTime = new SimpleDateFormat("EEE dd.MM.yyyy - HH:mm");
         String time = sdfTime.format(date);
 
+        df = new DecimalFormat();
+        df.setMaximumFractionDigits(2);
+
         txtTime.setText("Termin: " + time);
         txtOrganizer.setText("Veranstalter: " + organizerName);
 
@@ -87,7 +90,7 @@ public class Activity_past_evening_details extends AppCompatActivity {
                 if (ratingOrganizer.getRating() == 0 || ratingEvening.getRating() == 0 || ratingFood.getRating() == 0) {
                     Toast.makeText(Activity_past_evening_details.this, "Bitte alle Punkte bewerten", Toast.LENGTH_SHORT).show();
                 } else {
-                    databaseController.db
+                    databaseController.mDatabase
                             .collection(DatabaseController.PAST_EVENING_COL)
                             .document("Termin" + eveningId)
                             .get()
@@ -129,7 +132,7 @@ public class Activity_past_evening_details extends AppCompatActivity {
 
     //Prüft, ob User bereits abgestimmt hat, wenn ja werden alle wählbaren Komponenten gesperrt und die Gesamtbewertung aus der DB geladen
     private void CheckUserRated() {
-        databaseController.db.collection(DatabaseController.PAST_EVENING_COL)
+        databaseController.mDatabase.collection(DatabaseController.PAST_EVENING_COL)
                 .document("Termin"+ eveningId)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -150,11 +153,11 @@ public class Activity_past_evening_details extends AppCompatActivity {
                                     float general = task.getResult().getLong("BewertungAllg").floatValue() / ratingUserCount;
 
                                     ratingOrganizer.setRating(task.getResult().getLong("BewertungVer").intValue() / ratingUserCount);
-                                    textOrganizer.setText("Gastgeber: Wertung: " + organizer);
+                                    textOrganizer.setText("Gastgeber: Wertung: " + df.format(organizer));
                                     ratingFood.setRating(task.getResult().getLong("BewertungFood").intValue() / ratingUserCount);
-                                    textFood.setText("Essen: Wertung: " + food);
+                                    textFood.setText("Essen: Wertung: " + df.format(food));
                                     ratingEvening.setRating(task.getResult().getLong("BewertungAllg").intValue() / ratingUserCount);
-                                    textEvening.setText("Abend allgemein: Wertung: " + general);
+                                    textEvening.setText("Abend allgemein: Wertung: " + df.format(general));
 
                                     ratingOrganizer.setEnabled(false);
                                     ratingFood.setEnabled(false);

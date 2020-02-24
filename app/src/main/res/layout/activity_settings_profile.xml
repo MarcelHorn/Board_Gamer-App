@@ -7,19 +7,44 @@
         android:id="@+id/textView_settings_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Benutzername" />
+        android:text="@string/benutzername" />
 
     <EditText
         android:id="@+id/editText_setting_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
+        android:enabled="false"
         android:inputType="textPersonName" />
 
-    <Button
-        android:id="@+id/button"
+    <TextView
+        android:id="@+id/textView7"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/custom_button"
-        android:text="@string/btn_settings_refresh" />
+        android:text="@string/id" />
+
+    <EditText
+        android:id="@+id/editTextId"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:enabled="false"
+        android:inputType="textPersonName" />
+
+    <TextView
+        android:id="@+id/tex"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/gruppenstatus" />
+
+    <EditText
+        android:id="@+id/editText2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:enabled="false"
+        android:inputType="textPersonName"
+        android:text="@string/admin"
+        android:autofillHints="" />
+
 </LinearLayout>

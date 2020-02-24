@@ -26,19 +26,10 @@
             android:text="@string/btn_groups" />
 
         <Button
-            android:id="@+id/button10"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"
-            android:background="@drawable/custom_button"
-            android:onClick="onClickBenachrichtigungen"
-            android:text="@string/btn_settings_messages" />
-
-        <Button
             android:id="@+id/button11"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp"
             android:background="@drawable/custom_button"
             android:onClick="onClickProfil"
@@ -48,7 +39,8 @@
             android:id="@+id/btn_logout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
             android:background="@drawable/custom_button"
-            android:text="Ausloggen" />
+            android:text="@string/ausloggen" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

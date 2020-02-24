@@ -15,7 +15,7 @@
             android:id="@+id/textPastTime"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="TextView"
+            android:text="@string/textview"
             android:textSize="18sp" />
 
         <TextView
@@ -23,7 +23,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:text="TextView"
+            android:text="@string/textview"
             android:textSize="18sp" />
 
         <TextView
@@ -32,13 +32,13 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp"
-            android:text="Wie hat dir dieser Spieleabend gefallen?" />
+            android:text="@string/wie_hat_dir_dieser_spieleabend_gefallen" />
 
         <TextView
             android:id="@+id/textRatingOrganizer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Gastgeber:" />
+            android:text="@string/gastgeber" />
 
         <RatingBar
             android:id="@+id/ratingBarOrganizer"
@@ -52,7 +52,7 @@
             android:id="@+id/textRatingFood"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Essen:" />
+            android:text="@string/essen" />
 
         <RatingBar
             android:id="@+id/ratingBarFood"
@@ -66,7 +66,7 @@
             android:id="@+id/textRatingGeneral"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Abend allgemein:" />
+            android:text="@string/abend_allgemein" />
 
         <RatingBar
             android:id="@+id/ratingBarGeneral"
@@ -81,6 +81,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/custom_button"
-            android:text="Bewertung einreichen" />
+            android:text="@string/bewertung_einreichen" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

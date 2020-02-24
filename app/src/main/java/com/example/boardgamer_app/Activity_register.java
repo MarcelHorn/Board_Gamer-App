@@ -5,7 +5,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -13,13 +12,10 @@ import android.widget.Toast;
 
 import com.example.boardgamer_app.Classes.DatabaseController;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -32,7 +28,7 @@ public class Activity_register extends AppCompatActivity {
     DatabaseController databaseController = new DatabaseController();
     //FirebaseAuth mFirebaseAuth;
     //Instanz zur Datenbank
-    //FirebaseFirestore db = FirebaseFirestore.getInstance();
+    //FirebaseFirestore mDatabase = FirebaseFirestore.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,7 +84,7 @@ public class Activity_register extends AppCompatActivity {
                             }
                             else
                             {
-                                databaseController.db.collection(DatabaseController.GROUP_COL)
+                                databaseController.mDatabase.collection(DatabaseController.GROUP_COL)
                                         .document(DatabaseController.GROUP_SETTINGS_DOC)
                                         .get()
                                         .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {

@@ -3,11 +3,8 @@ package com.example.boardgamer_app;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Context;
-import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,17 +18,10 @@ import android.widget.Toast;
 import com.example.boardgamer_app.Classes.DatabaseController;
 import com.example.boardgamer_app.Classes.DialogGames;
 import com.example.boardgamer_app.Classes.Game;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.Timestamp;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.model.Document;
 
 
-import java.lang.reflect.Array;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -76,7 +66,7 @@ public class Activity_evening_details extends AppCompatActivity implements Dialo
 
 
         //Laden der User Id aus der Datenbank
-        databaseController.db
+        databaseController.mDatabase
                 .collection(DatabaseController.USER_COL)
                 .document(databaseController.mFirebaseAuth.getCurrentUser().getEmail())
                 .get()
@@ -88,7 +78,7 @@ public class Activity_evening_details extends AppCompatActivity implements Dialo
                         userId = documentSnapshot.getLong("id").intValue();
 
                         //Laden der Spielevorschläge, NACHDEM die User Id geladen wurde
-                        databaseController.db
+                        databaseController.mDatabase
                                 .collection(DatabaseController.EVENING_COL)
                                 .document("Termin"+eveningId)
                                 .get()

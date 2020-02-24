@@ -52,10 +52,10 @@ public class Activity_evenings extends AppCompatActivity {
 
         listViewObjects = new ArrayList<>();
         userData = new HashMap<>();
-        eveningCollection = databaseController.db.collection(DatabaseController.EVENING_COL);
+        eveningCollection = databaseController.mDatabase.collection(DatabaseController.EVENING_COL);
         listView = findViewById(R.id.listview);
 
-        databaseController.db.collection(DatabaseController.USER_COL)
+        databaseController.mDatabase.collection(DatabaseController.USER_COL)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override

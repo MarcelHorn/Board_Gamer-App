@@ -51,11 +51,8 @@
     <string name="text_setting_mail">E-Mail-Adresse</string>
     <string name="text_date_plain">Uhrzeit</string>
     <string name="text_date_time_plain">Datum</string>
-    <string name="text_title_Create_Group">Zum erstelllen einer neuen Gruppe, bitte Wochentag, Rhythmus und Uhrzeit wählen</string>
-    <string name="title_activity_confirm">Confirm</string>
-    <string name="text_city">Wohnort</string>
-    <string name="text_settings_street">Straße</string>
-    <string name="text_setting_houseNumber">Hausnummer</string>
+    <string name="text_title_Create_Group">Zum Erstelllen einer neuen Gruppe, bitte Wochentag, Rhythmus und Uhrzeit wählen</string>
+    <string name="title_activity_confirm">Bestätigen</string>
     <string name="text_login_title">Willkommen</string>
     <string name="login_mail">E-Mail-Adresse</string>
     <string name="login_password">Passwort</string>
@@ -74,6 +71,18 @@
     <string name="abbrechen">Abbrechen</string>
     <string name="vorschlagen">Vorschlagen</string>
     <string name="vergangene_termine">Vergangene Termine</string>
+    <string name="benutzername">Benutzername</string>
+    <string name="nachricht_erstellen">Nachricht erstellen</string>
+    <string name="textview">TextView</string>
+    <string name="wie_hat_dir_dieser_spieleabend_gefallen">Wie hat dir dieser Spieleabend gefallen?</string>
+    <string name="gastgeber">Gastgeber:</string>
+    <string name="essen">Essen:</string>
+    <string name="abend_allgemein">Abend allgemein:</string>
+    <string name="bewertung_einreichen">Bewertung einreichen</string>
+    <string name="ausloggen">Ausloggen</string>
+    <string name="id">ID</string>
+    <string name="gruppenstatus">Gruppenstatus</string>
+    <string name="admin">Admin</string>
 
 
 </resources>

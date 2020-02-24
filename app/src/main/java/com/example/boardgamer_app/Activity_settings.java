@@ -44,12 +44,6 @@ public class Activity_settings extends AppCompatActivity {
         startActivity(changeIntent);
     }
 
-    public void onClickBenachrichtigungen (View Button)
-    {
-        Intent changeIntent = new Intent (Activity_settings.this, Activity_settings_notifications.class);
-        startActivity(changeIntent);
-    }
-
     public void onClickProfil (View Button)
     {
         Intent changeIntent = new Intent (Activity_settings.this, Activity_settings_user.class);

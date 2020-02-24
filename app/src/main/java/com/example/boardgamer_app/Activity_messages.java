@@ -20,6 +20,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.Source;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -65,7 +66,7 @@ public class Activity_messages extends AppCompatActivity implements DialogMessag
         });
 
         //Holt alle Nachrichten aus der DB und packt sie in die Liste "listViewObjects"
-        databaseController.db
+        databaseController.mDatabase
                 .collection("Nachrichten")
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -98,7 +99,7 @@ public class Activity_messages extends AppCompatActivity implements DialogMessag
                             public void onClick(DialogInterface dialog, int which) {
 
                                 deletedMessage = listViewObjects.get(deletePos).trim();
-                                databaseController.db.collection("Nachrichten")
+                                databaseController.mDatabase.collection("Nachrichten")
                                         .get()
                                         .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                                             @Override

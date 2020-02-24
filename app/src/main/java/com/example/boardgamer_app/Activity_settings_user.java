@@ -23,7 +23,7 @@ public class Activity_settings_user extends AppCompatActivity {
 
 
 
-    EditText name;
+    EditText name, id;
     //gesamte Datenbank Instanz
     FirebaseFirestore db = FirebaseFirestore.getInstance();
 
@@ -38,6 +38,7 @@ public class Activity_settings_user extends AppCompatActivity {
         setContentView(R.layout.activity_settings_profile);
 
         name = findViewById(R.id.editText_setting_name);
+        id = findViewById(R.id.editTextId);
 
         //hiermit holt man sich das document
          userRef.get()
@@ -48,14 +49,13 @@ public class Activity_settings_user extends AppCompatActivity {
                         Toast.makeText(Activity_settings_user.this,"Daten geladen", Toast.LENGTH_LONG).show();
                         if( documentSnapshot.exists())
                         {
-                            //und hiermit das Feld "name"
                             String username = documentSnapshot.getString(KEY_NAME);
-                            //setzt den Text für den Benutzernamen in den der DB
+                            int i = documentSnapshot.getLong("id").intValue();
                             name.setText(username);
+                            id.setText("" + i);
                         }
                         else
                         {
-                            //bei fehlenden Daten
                             Toast.makeText(Activity_settings_user.this,"Daten nicht vorhanden", Toast.LENGTH_LONG).show();
                         }
                     }

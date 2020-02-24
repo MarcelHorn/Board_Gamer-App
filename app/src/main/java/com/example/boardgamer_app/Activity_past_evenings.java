@@ -52,12 +52,12 @@ public class Activity_past_evenings extends AppCompatActivity {
 
         listViewObjects = new ArrayList<>();
         userData = new HashMap<>();
-        pastEveningCollection = databaseController.db.collection(DatabaseController.PAST_EVENING_COL);
+        pastEveningCollection = databaseController.mDatabase.collection(DatabaseController.PAST_EVENING_COL);
         listView = findViewById(R.id.listViewPastEvenings);
 
         userId = getIntent().getIntExtra("UserNameId", 0);
 
-        databaseController.db.collection(DatabaseController.USER_COL)
+        databaseController.mDatabase.collection(DatabaseController.USER_COL)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override

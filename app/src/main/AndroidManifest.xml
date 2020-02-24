@@ -27,13 +27,9 @@
         <activity
             android:name=".Activity_evenings"
             android:label="Anstehende Termine" />
-        <activity android:name=".Activity_create_group" />
         <activity
             android:name=".Activity_settings_user"
             android:label="Benutzereinstellungen" />
-        <activity
-            android:name=".Activity_settings_notifications"
-            android:label="Benachrichtigungseinstellungen" />
         <activity
             android:name=".Activity_settings_evenings"
             android:label="Termineinstellungen" />
@@ -42,7 +38,8 @@
             android:label="Einstellungen" />
         <activity android:name=".Activity_messages"
             android:label="Nachrichten"/>
-        <activity android:name=".MainActivity" />
+        <activity android:name=".MainActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
         <activity
             android:name=".Activity_register"
             android:label="Registrieren" />
