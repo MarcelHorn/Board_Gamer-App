@@ -8,10 +8,14 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.content.Intent;
 import android.view.View;
+import android.widget.Toast;
+
 import androidx.appcompat.widget.Toolbar;
 
 import com.example.boardgamer_app.Classes.DatabaseController;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
 
 
@@ -21,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
     //Keys
     public static final String KEY_NAME = "name";
 
-    private int userId;
+    private Integer userId;
     private String userName;
 
     //optional: ist der TAG der Exception, um mögliche Fehler zu lokalisieren
@@ -48,11 +52,15 @@ public class MainActivity extends AppCompatActivity {
                 .collection(DatabaseController.USER_COL)
                 .document(databaseController.mFirebaseAuth.getCurrentUser().getEmail())
                 .get()
-                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                     @Override
-                    public void onSuccess(@NonNull DocumentSnapshot documentSnapshot) {
-                        userId = documentSnapshot.getLong("id").intValue();
-                        userName = documentSnapshot.getString("name");
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.getResult().getReference() != null && task.isSuccessful() ) {
+                            //userId = task.getResult().getLong("id").intValue();
+                            userName = task.getResult().getString("name");
+                        } else {
+                            Toast.makeText(MainActivity.this,"Kein Benutzer geladen. Bitte abmelden!", Toast.LENGTH_LONG).show();
+                        }
                     }
                 });
     }

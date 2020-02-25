@@ -394,20 +394,22 @@ public class Activity_settings_evenings extends AppCompatActivity implements Tim
                         break;
                     }
                 }
+
+                //Updatet am Ende den "lastOrganizer", also der Veranstallter des 5.ten Termins, damit beim nächsten Terminupdate die Reihenfolge fortgesetzt wird
+                Map<String, Object> lastOrganizerData = new HashMap<>();
+                lastOrganizerData.put("lastOrganizer", lastOrganizer);
+                databaseController.UpdateDatabase(DatabaseController.GROUP_COL,DatabaseController.GROUP_SETTINGS_DOC,lastOrganizerData);
+
+                if (isSuccess) {
+                    Toast.makeText(Activity_settings_evenings.this, "Erfolgreich aktualisiert", Toast.LENGTH_SHORT).show();
+                }else {
+                    Toast.makeText(Activity_settings_evenings.this, "Aktualisierung fehlgeschlagen!", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
 
-        //Updatet am Ende den "lastOrganizer", also der Veranstallter des 5.ten Termins, damit beim nächsten Terminupdate die Reihenfolge fortgesetzt wird
-        Map<String, Object> lastOrganizerData = new HashMap<>();
-        lastOrganizerData.put("lastOrganizer", lastOrganizer);
-        databaseController.UpdateDatabase(DatabaseController.GROUP_COL,DatabaseController.GROUP_SETTINGS_DOC,lastOrganizerData);
 
-        if (isSuccess) {
-            Toast.makeText(Activity_settings_evenings.this, "Erfolgreich aktualisiert", Toast.LENGTH_SHORT).show();
-        }else {
-            Toast.makeText(Activity_settings_evenings.this, "Aktualisierung fehlgeschlagen!", Toast.LENGTH_SHORT).show();
-        }
 
     }
     //Methode zur Callback Funktion
