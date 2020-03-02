@@ -6,7 +6,9 @@ import android.os.Bundle;
 import android.content.Intent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
+import com.example.boardgamer_app.Classes.CheckInternet;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class Activity_settings extends AppCompatActivity {
@@ -40,8 +42,12 @@ public class Activity_settings extends AppCompatActivity {
 
     public void onClickGruppen (View Button)
     {
-        Intent changeIntent = new Intent (Activity_settings.this, Activity_settings_evenings.class);
-        startActivity(changeIntent);
+        if (CheckInternet.isNetwork(Activity_settings.this)) {
+            Intent changeIntent = new Intent (Activity_settings.this, Activity_settings_evenings.class);
+            startActivity(changeIntent);
+        }
+        else Toast.makeText(Activity_settings.this, CheckInternet.NO_CONNECTION, Toast.LENGTH_SHORT).show();
+
     }
 
     public void onClickProfil (View Button)

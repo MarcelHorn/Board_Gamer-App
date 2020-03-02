@@ -3,6 +3,7 @@ package com.example.boardgamer_app;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -10,6 +11,7 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.boardgamer_app.Classes.CheckInternet;
 import com.example.boardgamer_app.Classes.DatabaseController;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -86,44 +88,47 @@ public class Activity_past_evening_details extends AppCompatActivity {
         buttonCreateRating.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if (CheckInternet.isNetwork(Activity_past_evening_details.this)) {
+                    if (ratingOrganizer.getRating() == 0 || ratingEvening.getRating() == 0 || ratingFood.getRating() == 0) {
+                        Toast.makeText(Activity_past_evening_details.this, "Bitte alle Punkte bewerten", Toast.LENGTH_SHORT).show();
+                    } else {
+                        databaseController.mDatabase
+                                .collection(DatabaseController.PAST_EVENING_COL)
+                                .document("Termin" + eveningId)
+                                .get()
+                                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                        if (task.isSuccessful() && task.getResult() != null) {
+                                            ratingOrganizerCount = task.getResult().getLong("BewertungVer").floatValue();
+                                            ratingFoodCount = task.getResult().getLong("BewertungFood").floatValue();
+                                            ratingGeneralCount = task.getResult().getLong("BewertungAllg").floatValue();
 
-                if (ratingOrganizer.getRating() == 0 || ratingEvening.getRating() == 0 || ratingFood.getRating() == 0) {
-                    Toast.makeText(Activity_past_evening_details.this, "Bitte alle Punkte bewerten", Toast.LENGTH_SHORT).show();
-                } else {
-                    databaseController.mDatabase
-                            .collection(DatabaseController.PAST_EVENING_COL)
-                            .document("Termin" + eveningId)
-                            .get()
-                            .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                                @Override
-                                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                    if (task.isSuccessful() && task.getResult() != null) {
-                                        ratingOrganizerCount = task.getResult().getLong("BewertungVer").floatValue();
-                                        ratingFoodCount = task.getResult().getLong("BewertungFood").floatValue();
-                                        ratingGeneralCount = task.getResult().getLong("BewertungAllg").floatValue();
+                                            ratingUserCount = task.getResult().getLong("AnzahlBewertungen").intValue();
 
-                                        ratingUserCount = task.getResult().getLong("AnzahlBewertungen").intValue();
+                                            ratingOrganizerCount += ratingOrganizer.getRating();
+                                            ratingFoodCount += ratingFood.getRating();
+                                            ratingGeneralCount += ratingEvening.getRating();
 
-                                        ratingOrganizerCount += ratingOrganizer.getRating();
-                                        ratingFoodCount += ratingFood.getRating();
-                                        ratingGeneralCount += ratingEvening.getRating();
+                                            ratingUserCount++;
 
-                                        ratingUserCount++;
+                                            Map<String, Object> data = new HashMap<>();
+                                            data.put("BewertungVer", ratingOrganizerCount);
+                                            data.put("BewertungFood", ratingFoodCount);
+                                            data.put("BewertungAllg", ratingGeneralCount);
+                                            data.put("AnzahlBewertungen", ratingUserCount);
+                                            data.put("User" + userId + "rated", true);
 
-                                        Map<String, Object> data = new HashMap<>();
-                                        data.put("BewertungVer", ratingOrganizerCount);
-                                        data.put("BewertungFood", ratingFoodCount);
-                                        data.put("BewertungAllg", ratingGeneralCount);
-                                        data.put("AnzahlBewertungen", ratingUserCount);
-                                        data.put("User" + userId + "rated", true);
-
-                                        databaseController.writeInDatabase(DatabaseController.PAST_EVENING_COL, "Termin" + eveningId, data);
-                                        Toast.makeText(Activity_past_evening_details.this, "Vielen Dank für die Bewertung!", Toast.LENGTH_SHORT).show();
-                                        CheckUserRated();
+                                            databaseController.writeInDatabase(DatabaseController.PAST_EVENING_COL, "Termin" + eveningId, data);
+                                            Toast.makeText(Activity_past_evening_details.this, "Vielen Dank für die Bewertung!", Toast.LENGTH_SHORT).show();
+                                            CheckUserRated();
+                                        }
                                     }
-                                }
-                            });
+                                });
+                    }
                 }
+                else Toast.makeText(Activity_past_evening_details.this, CheckInternet.NO_CONNECTION, Toast.LENGTH_SHORT).show();
+
 
             }
         });
@@ -165,7 +170,12 @@ public class Activity_past_evening_details extends AppCompatActivity {
                                 }
                             }
                         }
-                    }
+
+                        else {
+                                Toast.makeText(Activity_past_evening_details.this,"Daten konnten nicht geladen werden", Toast.LENGTH_SHORT).show();
+                                Intent changeIntent = new Intent (Activity_past_evening_details.this, MainActivity.class);
+                                startActivity(changeIntent);
+                        }}
                 });
     }
 }

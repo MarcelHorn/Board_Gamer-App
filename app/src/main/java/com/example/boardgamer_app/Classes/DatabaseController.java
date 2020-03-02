@@ -1,7 +1,12 @@
 package com.example.boardgamer_app.Classes;
 
 
+import android.app.Activity;
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -84,6 +89,28 @@ public class DatabaseController {
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
+                        Log.d(DEBUGTAG, "Failure!");
+                    }
+                });
+    }
+
+    //überschreibt alle Felder des Dokuments mit der neuen Map (nicht erwähnte werden gelöscht)
+    public void writeInDatabase (final Context context, String collection, String document, Map<String, Object> field) {
+        mDatabase.collection(collection)
+                .document(document)
+                .set(field, SetOptions.merge())
+                //Wenn erfolgreich
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void xvoid) {
+                        Log.d(DEBUGTAG, "Success!");
+                    }
+                })
+                //Bei Lade-Fehler Exception
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(context, "Daten konnten nicht gespeichert werden", Toast.LENGTH_SHORT).show();
                         Log.d(DEBUGTAG, "Failure!");
                     }
                 });
@@ -291,4 +318,5 @@ public class DatabaseController {
                     }
                 });
     }
+
 }

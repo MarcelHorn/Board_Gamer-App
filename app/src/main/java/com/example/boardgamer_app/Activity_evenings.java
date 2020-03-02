@@ -10,7 +10,9 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
+import com.example.boardgamer_app.Classes.CheckInternet;
 import com.example.boardgamer_app.Classes.DatabaseController;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -111,13 +113,18 @@ public class Activity_evenings extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view,
                                        int position, long id) {
-                Intent intent = new Intent(Activity_evenings.this, Activity_evening_details.class);
+                if (CheckInternet.isNetwork(Activity_evenings.this)) {
+                    Intent intent = new Intent(Activity_evenings.this, Activity_evening_details.class);
 
-                long longTime = timestampList.get(position).getSeconds()*1000;
-                intent.putExtra("Timestamp", longTime);
-                intent.putExtra("Organizer", userData.get(eveningOrganizerList.get(position)));
-                intent.putExtra("id",  eveningIdList.get(position));
-                startActivity(intent);
+                    long longTime = timestampList.get(position).getSeconds()*1000;
+                    intent.putExtra("Timestamp", longTime);
+                    intent.putExtra("Organizer", userData.get(eveningOrganizerList.get(position)));
+                    intent.putExtra("id",  eveningIdList.get(position));
+                    startActivity(intent);
+                }
+                else Toast.makeText(Activity_evenings.this, CheckInternet.NO_CONNECTION, Toast.LENGTH_SHORT).show();
+
+
             }
         });
     }

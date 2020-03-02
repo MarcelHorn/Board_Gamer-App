@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.boardgamer_app.R;
 
@@ -54,11 +55,15 @@ public class DialogMessages extends DialogFragment {
         mActionOk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.d(TAG, "onClick: OK");
-                String input = mInput.getText().toString();
-                Log.d(TAG, input);
-                mOnInputListener.sendInput(input);
-                getDialog().dismiss();
+                if (CheckInternet.isNetwork(getActivity())) {
+                    Log.d(TAG, "onClick: OK");
+                    String input = mInput.getText().toString();
+                    Log.d(TAG, input);
+                    mOnInputListener.sendInput(input);
+                    getDialog().dismiss();
+                }
+                else Toast.makeText(getActivity(), CheckInternet.NO_CONNECTION, Toast.LENGTH_SHORT).show();
+
             }
 
         });

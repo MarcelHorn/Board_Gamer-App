@@ -70,7 +70,7 @@
     <string name="w_hle_ein_spiel_aus">Wähle ein Spiel aus</string>
     <string name="abbrechen">Abbrechen</string>
     <string name="vorschlagen">Vorschlagen</string>
-    <string name="vergangene_termine">Vergangene Termine</string>
+    <string name="vergangene_termine">Vergangene Termine bewerten</string>
     <string name="benutzername">Benutzername</string>
     <string name="nachricht_erstellen">Nachricht erstellen</string>
     <string name="textview">TextView</string>

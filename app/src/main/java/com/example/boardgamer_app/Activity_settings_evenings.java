@@ -16,6 +16,7 @@ import android.widget.Spinner;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.example.boardgamer_app.Classes.CheckInternet;
 import com.example.boardgamer_app.Classes.DatabaseController;
 import com.example.boardgamer_app.Classes.Evening;
 import com.example.boardgamer_app.Classes.TimePickerFragment;
@@ -203,26 +204,30 @@ public class Activity_settings_evenings extends AppCompatActivity implements Tim
 
     public void onClickRefreshGroup(View view) {
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(Activity_settings_evenings.this);
-        builder.setCancelable(true);
-        builder.setTitle("Warnung");
-        builder.setMessage("Wirklich die Termineinstellungen aktualisieren? (Daten gehen möglicherweise verloren)");
-        builder.setPositiveButton("Bestätigen",
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        isSuccess = false;
-                        DeleteOldEvenings();
-                    }
-                });
-        builder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-            }
-        });
+        if (CheckInternet.isNetwork(Activity_settings_evenings.this)) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(Activity_settings_evenings.this);
+            builder.setCancelable(true);
+            builder.setTitle("Warnung");
+            builder.setMessage("Wirklich die Termineinstellungen aktualisieren? (Daten gehen möglicherweise verloren)");
+            builder.setPositiveButton("Bestätigen",
+                    new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            isSuccess = false;
+                            DeleteOldEvenings();
+                        }
+                    });
+            builder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                }
+            });
 
-        AlertDialog dialog = builder.create();
-        dialog.show();
+            AlertDialog dialog = builder.create();
+            dialog.show();
+        }
+        else Toast.makeText(Activity_settings_evenings.this, CheckInternet.NO_CONNECTION, Toast.LENGTH_SHORT).show();
+
 
 
 

@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.example.boardgamer_app.Classes.CheckInternet;
 import com.example.boardgamer_app.Classes.DatabaseController;
 import com.example.boardgamer_app.Classes.DialogMessages;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -60,8 +61,13 @@ public class Activity_messages extends AppCompatActivity implements DialogMessag
         {
             @Override
             public void onClick(View v) {
-                DialogMessages dialog = new DialogMessages();
-                dialog.show(getSupportFragmentManager(), "CustomMessages");
+                      if (CheckInternet.isNetwork(Activity_messages.this)) {
+                          DialogMessages dialog = new DialogMessages();
+                          dialog.show(getSupportFragmentManager(), "CustomMessages");
+                        }else
+                            {   Toast.makeText(Activity_messages.this, CheckInternet.NO_CONNECTION, Toast.LENGTH_SHORT).show();
+                            }
+
             }
         });
 

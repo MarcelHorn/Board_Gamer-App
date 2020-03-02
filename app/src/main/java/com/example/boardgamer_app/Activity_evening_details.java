@@ -3,6 +3,7 @@ package com.example.boardgamer_app;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
@@ -15,6 +16,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.boardgamer_app.Classes.CheckInternet;
 import com.example.boardgamer_app.Classes.DatabaseController;
 import com.example.boardgamer_app.Classes.DialogGames;
 import com.example.boardgamer_app.Classes.Game;
@@ -129,8 +131,13 @@ public class Activity_evening_details extends AppCompatActivity implements Dialo
         mGameCreate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                DialogGames dialog = new DialogGames();
-                dialog.show(getSupportFragmentManager(), "CustomGames");
+                if (CheckInternet.isNetwork(Activity_evening_details.this)) {
+                    DialogGames dialog = new DialogGames();
+                    dialog.show(getSupportFragmentManager(), "CustomGames");
+                }else{
+                   Toast.makeText(Activity_evening_details.this, CheckInternet.NO_CONNECTION, Toast.LENGTH_SHORT).show();
+                }
+
             }
         });
 
@@ -162,7 +169,7 @@ public class Activity_evening_details extends AppCompatActivity implements Dialo
             data.put("Game"+ (i+1)+"User" + userId, listViewObjects.get(i).isUserId());
         }
 
-        databaseController.writeInDatabase(DatabaseController.EVENING_COL, "Termin" + eveningId, data);
+        databaseController.writeInDatabase(this, DatabaseController.EVENING_COL, "Termin" + eveningId, data);
 
     }
 

@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.boardgamer_app.R;
 
@@ -74,12 +75,16 @@ public class DialogGames extends DialogFragment {
         mActionOk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.d(TAG, "onClick: OK");
-                String input = mInput.getSelectedItem().toString();
-                Log.d(TAG, input);
-                //sendet den input (der Spielname) an die Activity_anstehende_termine(bekannt durch die Attach-Methode und dem Interface OnInputListener)
-                mOnInputListener.sendInput(input);
-                getDialog().dismiss();
+                if (CheckInternet.isNetwork(getActivity())) {
+                    Log.d(TAG, "onClick: OK");
+                    String input = mInput.getSelectedItem().toString();
+                    Log.d(TAG, input);
+                    //sendet den input (der Spielname) an die Activity_anstehende_termine(bekannt durch die Attach-Methode und dem Interface OnInputListener)
+                    mOnInputListener.sendInput(input);
+                    getDialog().dismiss();
+                }
+                else Toast.makeText(getActivity(), CheckInternet.NO_CONNECTION, Toast.LENGTH_SHORT).show();
+
             }
 
         });

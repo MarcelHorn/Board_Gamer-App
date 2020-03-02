@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.widget.Toolbar;
 
+import com.example.boardgamer_app.Classes.CheckInternet;
 import com.example.boardgamer_app.Classes.DatabaseController;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -76,25 +77,40 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onClickNachrichten (View Button) {
-        Intent changeIntent = new Intent (MainActivity.this, Activity_messages.class);
-        changeIntent.putExtra("UserName", userName);
-        startActivity(changeIntent);
+              if (CheckInternet.isNetwork(MainActivity.this)) {
+                  Intent changeIntent = new Intent (MainActivity.this, Activity_messages.class);
+                  changeIntent.putExtra("UserName", userName);
+                  startActivity(changeIntent);
+          }else {
+                  Toast.makeText(MainActivity.this, "Keine Internetverbindung!", Toast.LENGTH_SHORT).show();
+              }
+
            }
 
     public void onClickEinstellungen (View Button) {
+
         Intent changeIntent = new Intent (MainActivity.this, Activity_settings.class);
         startActivity(changeIntent);
     }
 
     public void onClickVergangeneTermine (View Button) {
-        Intent changeIntent = new Intent (MainActivity.this, Activity_past_evenings.class);
-        changeIntent.putExtra("UserNameId", userId);
-        startActivity(changeIntent);
+              if (CheckInternet.isNetwork(MainActivity.this)) {
+                Intent changeIntent = new Intent (MainActivity.this, Activity_past_evenings.class);
+                changeIntent.putExtra("UserNameId", userId);
+                startActivity(changeIntent);
+                }
+              else Toast.makeText(MainActivity.this, CheckInternet.NO_CONNECTION, Toast.LENGTH_SHORT).show();
+
+
     }
 
     public void onClickAnstehendeTermine (View Button) {
-        Intent changeIntent = new Intent (MainActivity.this, Activity_evenings.class);
-        startActivity(changeIntent);
+        if (CheckInternet.isNetwork(MainActivity.this)) {
+            Intent changeIntent = new Intent (MainActivity.this, Activity_evenings.class);
+            startActivity(changeIntent);
+        }
+        else Toast.makeText(MainActivity.this, CheckInternet.NO_CONNECTION, Toast.LENGTH_SHORT).show();
+
     }
 
 }
