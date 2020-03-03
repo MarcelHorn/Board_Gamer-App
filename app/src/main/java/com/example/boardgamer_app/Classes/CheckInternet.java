@@ -15,7 +15,7 @@ public class CheckInternet {
         NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
-    
+
 
 //Vorlage zum Prüfen der Internetverbindung:
 
