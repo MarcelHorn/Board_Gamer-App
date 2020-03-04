@@ -82,7 +82,7 @@ public class MainActivity extends AppCompatActivity {
                   changeIntent.putExtra("UserName", userName);
                   startActivity(changeIntent);
           }else {
-                  Toast.makeText(MainActivity.this, "Keine Internetverbindung!", Toast.LENGTH_SHORT).show();
+                  Toast.makeText(MainActivity.this, CheckInternet.NO_CONNECTION, Toast.LENGTH_SHORT).show();
               }
 
            }
